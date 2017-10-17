@@ -16,18 +16,18 @@ module Minesweeper
       return @format[:flag] if cell.flag?
       return @format[:unknown_cell] if not cell.open?
       return @format[:bomb] if cell.bomb?
-      return cell.neighbors_bombs.to_s if cell.neighbors_bombs > 0
+      return cell.neighbor_bombs.to_s if cell.neighbor_bombs > 0
       return @format[:clear_cell]
     end
   end
 
   class Cell
-    attr_accessor :neighbors_bombs
-    def initialize(bomb)
-      @open = false
-      @flag = false
+    attr_accessor :neighbor_bombs
+    def initialize(bomb, flag=false, open=false, neighbor_bombs=nil)
+      @open = open
+      @flag = flag
       @bomb = bomb
-      @neighbors_bombs = nil
+      @neighbor_bombs = neighbor_bombs
     end
 
     def bomb?
@@ -50,7 +50,7 @@ module Minesweeper
       end
     end
 
-    def flag
+    def toggle_flag
       if not @open then
         @flag = (not @flag)
         return true
