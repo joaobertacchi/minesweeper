@@ -1,4 +1,5 @@
 require "spec_helper"
+require "minesweeper"
 
 RSpec.describe Minesweeper do
   it "has a version number" do
