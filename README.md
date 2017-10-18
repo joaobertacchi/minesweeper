@@ -22,7 +22,8 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+To access Minesweeper API, run `rdoc`. It creates html documentation in doc directory. Open doc/index.html
+in a browser.
 
 ## Development
 
