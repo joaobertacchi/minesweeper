@@ -155,6 +155,52 @@ RSpec.describe Minesweeper do
         end
       end
     end
+
+    describe "#state" do
+
+      it "unknown cell" do
+        cell = Minesweeper::Cell.new(bomb=false, flag=false, open=false, neighbor_bombs=0)
+        expect(cell.state).to eq(:unknown_cell)
+      end
+
+      it "clear cell" do
+        cell = Minesweeper::Cell.new(bomb=false, flag=false, open=true, neighbor_bombs=0)
+        expect(cell.state).to eq(:clear_cell)
+      end
+
+      it "numeric cell" do
+        cell = Minesweeper::Cell.new(bomb=false, flag=false, open=true, neighbor_bombs=3)
+        expect(cell.state).to eq(3)
+      end
+
+      it "bomb cell" do
+        cell = Minesweeper::Cell.new(bomb=true, flag=false, open=true, neighbor_bombs=0)
+        expect(cell.state).to eq(:bomb)
+      end
+
+      it "flag cell" do
+        cell_with_bomb = Minesweeper::Cell.new(bomb=true, flag=true, open=false, neighbor_bombs=0)
+        cell_without_bomb = Minesweeper::Cell.new(bomb=false, flag=true, open=false, neighbor_bombs=0)
+        expect(cell_with_bomb.state).to eq(:flag)
+        expect(cell_without_bomb.state).to eq(:flag)
+      end
+
+      it "with xray" do
+        clear_cell = Minesweeper::Cell.new(bomb=false, flag=false, open=false, neighbor_bombs=0)
+        numeric_cell = Minesweeper::Cell.new(bomb=false, flag=false, open=false, neighbor_bombs=4)
+        bomb_cell = Minesweeper::Cell.new(bomb=true, flag=false, open=false, neighbor_bombs=0)
+        flag_and_bomb_cell = Minesweeper::Cell.new(bomb=true, flag=true, open=false, neighbor_bombs=0)
+        flag_and_clear_cell = Minesweeper::Cell.new(bomb=false, flag=true, open=false, neighbor_bombs=0)
+        flag_and_numeric_cell = Minesweeper::Cell.new(bomb=false, flag=true, open=false, neighbor_bombs=3)
+        expect(clear_cell.state(true)).to eq(:clear_cell)
+        expect(numeric_cell.state(true)).to eq(4)
+        expect(bomb_cell.state(true)).to eq(:bomb)
+        expect(flag_and_bomb_cell.state(true)).to eq(:bomb)
+        expect(flag_and_clear_cell.state(true)).to eq(:clear_cell)
+        expect(flag_and_numeric_cell.state(true)).to eq(3)
+      end
+
+    end
   end
 
   describe Minesweeper::CellPrinter do
