@@ -1,4 +1,8 @@
 module Minesweeper
+
+  ##
+  # This class represents a minesweeper game
+
   class Game
     attr_accessor :width, :height, :num_mines
     
@@ -23,6 +27,10 @@ module Minesweeper
       @board[x][y].play
     end
     
+    ##
+    # Adds a flag to an unclicked cell or removes an existent flag.
+    # Returns a boolean to inform the validity of the play.
+
     def flag(x, y)
       @board[x][y].toggle_flag
     end
