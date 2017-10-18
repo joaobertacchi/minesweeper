@@ -1,7 +1,7 @@
 module Minesweeper
   class Cell
     attr_accessor :neighbor_bombs
-    def initialize(bomb, flag=false, open=false, neighbor_bombs=nil)
+    def initialize(bomb, flag=false, open=false, neighbor_bombs=0)
       @open = open
       @flag = flag
       @bomb = bomb

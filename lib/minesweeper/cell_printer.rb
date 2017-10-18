@@ -10,9 +10,9 @@ module Minesweeper
       @format=cell_format
     end
 
-    def print(cell)
+    def print(cell, xray=false)
       return @format[:flag] if cell.flag?
-      return @format[:unknown_cell] if not cell.open?
+      return @format[:unknown_cell] if not cell.open? and not xray
       return @format[:bomb] if cell.bomb?
       return cell.neighbor_bombs.to_s if cell.neighbor_bombs > 0
       return @format[:clear_cell]

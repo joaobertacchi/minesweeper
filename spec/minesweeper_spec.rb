@@ -11,6 +11,7 @@ RSpec.describe Minesweeper do
     before :each do
       width, height, num_mines = 10, 20, 50
       @game = Minesweeper::Game.new(width, height, num_mines)
+      @game.board_state
     end
 
     [ :still_playing?, :play, :flag, :board_state, :width, :height, :num_mines, :width=, :height=, :num_mines=, :victory? ].each do |method|
@@ -24,6 +25,7 @@ RSpec.describe Minesweeper do
         expect(@game.width).to eq(10)
         expect(@game.height).to eq(20)
         expect(@game.num_mines).to eq(50)
+        expect(@game.count_bombs).to eq(50)
       end
 
       it "with bigger than allowed num_mines value" do
@@ -52,12 +54,14 @@ RSpec.describe Minesweeper do
     describe "#play" do
       it "triggers a game play" do
         expect(@game.play(1, 1)).to eq(true)
+        expect(@game.play(1, 1)).to eq(false)
       end
     end
 
     describe "#flag" do
       it "puts a flag in the current game" do
         expect(@game.flag(1, 1)).to eq(true)
+        expect(@game.play(1, 1)).to eq(false)
       end
     end
 
