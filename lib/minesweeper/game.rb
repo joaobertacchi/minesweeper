@@ -27,13 +27,21 @@ module Minesweeper
       @board[x][y].toggle_flag
     end
     
-    def board_state
+    def print_board_state
       cell_printer = CellPrinter.new
       (0..(@height-1)).each do |i|
         puts "%s "*@width % @board[i].map{|cell| cell_printer.print(cell, true)}
       end
     end
     
+    def board_state(config={xray: false})
+      xray = config[:xray] if config.key?(:xray)
+
+      @board.map do |line|
+        line.map{|cell| cell.state(xray)}
+      end
+    end
+
     def victory?
       false
     end
