@@ -232,4 +232,25 @@ RSpec.describe Minesweeper do
     
   end
 
+  describe Minesweeper::Board do
+
+    describe "#initialize" do
+      it "with static bombs" do
+        bombs = [
+          [1, 0, 0],
+          [0, 0, 0],
+          [0, 0, 1]
+        ]
+        board = Minesweeper::Board.new(3,3,2,bombs)
+        expect(board.count_bombs).to eq(2)
+      end
+
+      it "with random bombs" do
+        board = Minesweeper::Board.new(10,20,25)
+        expect(board.count_bombs).to eq(25)
+      end
+    end
+
+  end
+
 end
