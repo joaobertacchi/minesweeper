@@ -18,7 +18,8 @@ module Minesweeper
 
     def print(board_state)
       board_state.each do |line|
-        puts "%s "*line.size % line.map{|cell| (cell.is_a?(Numeric) ? cell.to_s : @board_format[cell]) }
+        line_str = "%s "*line.size % line.map{|cell| (cell.is_a?(Numeric) ? cell.to_s : @board_format[cell]) }
+        puts line_str[0..-2]
       end
     end
 
