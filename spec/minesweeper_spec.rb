@@ -203,35 +203,6 @@ RSpec.describe Minesweeper do
     end
   end
 
-  describe Minesweeper::CellPrinter do
-    before :each do
-      @printer = Minesweeper::CellPrinter.new
-    end
-
-    describe "#print" do
-      it "closed cell" do
-        cell = Minesweeper::Cell.new(bomb=false)
-        expect(@printer.print(cell)).to eq(".")
-      end
-      it "closed and toggled cell" do
-        cell = Minesweeper::Cell.new(bomb=false, flag=true)
-        expect(@printer.print(cell)).to eq("F")
-      end
-      it "open and bomb cell" do
-        cell = Minesweeper::Cell.new(bomb=true, flag=false, open=true)
-        expect(@printer.print(cell)).to eq("#")
-      end
-      it "open and clear cell" do
-        cell = Minesweeper::Cell.new(bomb=false, flag=false, open=true, neighbor_bombs=0)
-        expect(@printer.print(cell)).to eq(" ")
-      end
-      it "open and 3 neighbor bombs cell" do
-        cell = Minesweeper::Cell.new(bomb=false, flag=false, open=true, neighbor_bombs=3)
-        expect(@printer.print(cell)).to eq("3")
-      end
-    end
-  end
-
   describe Minesweeper::SimplePrinter do
 
     before :each do
