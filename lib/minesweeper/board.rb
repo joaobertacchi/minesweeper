@@ -13,16 +13,24 @@ module Minesweeper
       @width = width
       @height = height
       @num_mines = num_mines
+      @exploded = false
 
       init_board(bombs_position)
       set_neighbor_bombs
+    end
+
+    def exploded?
+      @exploded
+    end
+
+    def closed_cells_without_bomb
     end
 
     def state(row, col)
       @board_cells[row][col].state
     end
     
-    def board_state(config)
+    def board_state(config={})
       xray = false
       xray = config[:xray] if config.key?(:xray)
 
@@ -42,7 +50,30 @@ module Minesweeper
     end
 
     def expand(row, col)
-      @board_cells[row][col].play
+      valid = @board_cells[row][col].play
+      return false if not valid
+
+      @exploded = @board_cells[row][col].bomb?
+      return valid if @exploded
+      
+      expansion_candidates = []
+      cell_coordinate = [row, col]
+      while not cell_coordinate.nil?
+        i = cell_coordinate[0]
+        j = cell_coordinate[1]
+        cell = @board_cells[i][j]
+        if cell.state == :clear_cell then
+          closed_neighbor_coordinates_without_bomb(i, j).each do |coordinate|
+            x = coordinate[0]
+            y = coordinate[1]
+            @board_cells[x][y].play
+            expansion_candidates.push(coordinate)
+          end
+        end
+        cell_coordinate = expansion_candidates.shift
+      end
+
+      valid
     end
 
     def toggle_flag(row, col)
@@ -99,6 +130,28 @@ module Minesweeper
         neighbors = unvisited_neighbors(current)
         candidates += neighbors
         visit(@board[row][col])
+      end
+    end
+
+    def neighbor_coordinates(row, col)
+      neighbors = []
+      ((row-1)..(row+1)).each do |i|
+        if i >= 0 and i < @height then
+          ((col-1)..(col+1)).each do |j|
+            if j >= 0 and j < @width then
+              neighbors.push([i, j]) if ((i != row) or (j != col))
+            end
+          end
+        end
+      end
+      neighbors
+    end
+
+    def closed_neighbor_coordinates_without_bomb(row, col)
+      neighbor_coordinates(row, col).select do |coordinate|
+        i = coordinate[0]
+        j = coordinate[1]
+        not @board_cells[i][j].open? and not @board_cells[i][j].bomb?
       end
     end
 

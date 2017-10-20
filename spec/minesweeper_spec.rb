@@ -266,6 +266,87 @@ RSpec.describe Minesweeper do
       end
     end
 
+    describe "#expand" do
+      it "board with no bomb before expansion" do
+        board = Minesweeper::Board.new(3,3,0)
+        expect(board.board_state).to eq(
+          [
+            [:unknown_cell, :unknown_cell, :unknown_cell],
+            [:unknown_cell, :unknown_cell, :unknown_cell],
+            [:unknown_cell, :unknown_cell, :unknown_cell]
+          ]
+        )
+      end
+
+      it "board with no bomb after expansion" do
+        board = Minesweeper::Board.new(3,3,0)
+        board.expand(0,0)
+        expect(board.board_state).to eq(
+          [
+            [:clear_cell, :clear_cell, :clear_cell],
+            [:clear_cell, :clear_cell, :clear_cell],
+            [:clear_cell, :clear_cell, :clear_cell]
+          ]
+        )
+      end
+
+      it "board with bombs after expansion (CASE 1)" do
+        bombs = [
+          [0,0,1,0,0],
+          [0,0,1,0,0],
+          [0,0,0,1,0],
+          [0,0,1,0,0],
+          [0,0,0,1,0]
+        ]
+        board = Minesweeper::Board.new(5,5,5,bombs)
+        board.expand(0,0)
+        Minesweeper::SimplePrinter.new.print(board.board_state)
+        expect(board.board_state).to eq(
+          [
+            [:clear_cell,           2, :unknown_cell, :unknown_cell, :unknown_cell],
+            [:clear_cell,           2, :unknown_cell, :unknown_cell, :unknown_cell],
+            [:clear_cell,           2, :unknown_cell, :unknown_cell, :unknown_cell],
+            [:clear_cell,           1, :unknown_cell, :unknown_cell, :unknown_cell],
+            [:clear_cell,           1, :unknown_cell, :unknown_cell, :unknown_cell]
+          ]
+        )
+      end
+
+      it "board with bombs after expansion (CASE 2)" do
+        bombs = [
+          [0,0,1,0,0],
+          [0,0,1,0,0],
+          [0,0,1,1,0],
+          [0,0,0,0,1],
+          [0,0,0,0,0]
+        ]
+        board = Minesweeper::Board.new(5,5,5,bombs)
+        board.expand(0,0)
+        Minesweeper::SimplePrinter.new.print(board.board_state)
+        expect(board.board_state).to eq(
+          [
+            [:clear_cell,           2, :unknown_cell, :unknown_cell, :unknown_cell],
+            [:clear_cell,           3, :unknown_cell, :unknown_cell, :unknown_cell],
+            [:clear_cell,           2, :unknown_cell, :unknown_cell, :unknown_cell],
+            [:clear_cell,           1,             2,             3, :unknown_cell],
+            [:clear_cell, :clear_cell,   :clear_cell,             1, :unknown_cell]
+          ]
+        )
+        board.expand(0,4)
+        puts
+        Minesweeper::SimplePrinter.new.print(board.board_state)
+        expect(board.board_state).to eq(
+          [
+            [:clear_cell,           2, :unknown_cell,             2,   :clear_cell],
+            [:clear_cell,           3, :unknown_cell,             4,             1],
+            [:clear_cell,           2, :unknown_cell, :unknown_cell, :unknown_cell],
+            [:clear_cell,           1,             2,             3, :unknown_cell],
+            [:clear_cell, :clear_cell,   :clear_cell,             1, :unknown_cell]
+          ]
+        )
+      end
+    end
+
   end
 
 end
