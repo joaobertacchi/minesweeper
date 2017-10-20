@@ -82,8 +82,6 @@ module Minesweeper
 
     private
     def init_board(bombs_position)
-      #@board_cells = Array.new(@height) { Array.new(@width) }
-
       if bombs_position.nil? then
         bombs_position = random_bombs_position
       end
@@ -122,17 +120,6 @@ module Minesweeper
       end
     end
 
-    def expand_helper(candidates)
-      while not candidates.empty? do
-        current = candidates.shift
-        row = current[0]
-        col = current[1]
-        neighbors = unvisited_neighbors(current)
-        candidates += neighbors
-        visit(@board[row][col])
-      end
-    end
-
     def neighbor_coordinates(row, col)
       neighbors = []
       ((row-1)..(row+1)).each do |i|
@@ -153,20 +140,6 @@ module Minesweeper
         j = coordinate[1]
         not @board_cells[i][j].open? and not @board_cells[i][j].bomb?
       end
-    end
-
-    def unvisited_neighbors(point)
-      row = point[0]
-      col = point[1]
-      neighbors = []
-
-      (row-1)..(row+1).each do |i|
-        (col-1)..(col+1).each do |j|
-          if (i != row or j!= col) and (not @board[i][j].bomb?) and (not @board[i][j].open?) then
-            neighbors.push(@board[i][j])
-          end
-        end
-      end  
     end
 
   end
