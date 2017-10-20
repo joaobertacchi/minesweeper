@@ -1,5 +1,5 @@
-require "minesweeper/version"
-require "minesweeper/cell"
-require "minesweeper/game"
-require "minesweeper/printer"
-require "minesweeper/board"
+require 'minesweeper/version'
+require 'minesweeper/cell'
+require 'minesweeper/game'
+require 'minesweeper/printer'
+require 'minesweeper/board'
