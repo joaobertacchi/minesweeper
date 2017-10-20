@@ -14,6 +14,11 @@ module Minesweeper
       @playing
     end
     
+    ##
+    # Open the cell located at (row, col) position. Returns a boolean to signal
+    # ithe move is validity. A move is valid if the cell is closed and
+    # unflagged.
+
     def play(row, col)
       return false if not @playing
       is_valid = @board.expand(row,col)
@@ -22,12 +27,13 @@ module Minesweeper
     end
     
     ##
-    # Adds a flag to an unclicked cell or removes an existent flag.
+    # Adds/removes a flag to/from a closed cell at row and col position on the
+    # board.
     # Returns a boolean to inform the validity of the play.
 
-    def flag(x, y)
+    def flag(row, col)
       return false if not @playing
-      @board.toggle_flag(x,y)
+      @board.toggle_flag(row, col)
     end
     
     ##
