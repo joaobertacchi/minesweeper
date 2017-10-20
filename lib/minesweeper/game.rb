@@ -4,7 +4,6 @@ module Minesweeper
   # This class represents a minesweeper game
 
   class Game
-    attr_accessor :width, :height, :num_mines
     
     def initialize(width, height, num_mines)
       @board = Board.new(width, height, num_mines)

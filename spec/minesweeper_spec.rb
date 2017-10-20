@@ -14,7 +14,7 @@ RSpec.describe Minesweeper do
       #Minesweeper::SimplePrinter.new.print(@game.board_state(xray: true))
     end
 
-    [ :still_playing?, :play, :flag, :board_state, :width, :height, :num_mines, :width=, :height=, :num_mines=, :victory? ].each do |method|
+    [:still_playing?, :play, :flag, :board_state, :victory?].each do |method|
       it "responds to #{method}" do
         expect(@game).to respond_to method
       end
@@ -228,7 +228,7 @@ RSpec.describe Minesweeper do
 
   describe Minesweeper::Board do
 
-    [ :state, :expand, :toggle_flag ].each do |method|
+    [:state, :expand, :toggle_flag].each do |method|
       it "responds to #{method}" do
         expect(Minesweeper::Board.new(1,1,0)).to respond_to method
       end
