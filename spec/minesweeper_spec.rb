@@ -11,7 +11,7 @@ RSpec.describe Minesweeper do
     before :each do
       width, height, num_mines = 10, 20, 50
       @game = Minesweeper::Game.new(width, height, num_mines)
-      @game.board_state
+      #Minesweeper::SimplePrinter.new.print(@game.board_state(xray: true))
     end
 
     [ :still_playing?, :play, :flag, :board_state, :width, :height, :num_mines, :width=, :height=, :num_mines=, :victory? ].each do |method|
@@ -21,12 +21,6 @@ RSpec.describe Minesweeper do
     end
 
     describe "#initialize" do
-      it "creates a valid game" do
-        expect(@game.width).to eq(10)
-        expect(@game.height).to eq(20)
-        expect(@game.num_mines).to eq(50)
-        expect(@game.count_bombs).to eq(50)
-      end
 
       it "with bigger than allowed num_mines value" do
         expect{ Minesweeper::Game.new(5,5,26) }.to raise_error(RuntimeError)
@@ -234,7 +228,14 @@ RSpec.describe Minesweeper do
 
   describe Minesweeper::Board do
 
+    [ :state, :expand, :toggle_flag ].each do |method|
+      it "responds to #{method}" do
+        expect(Minesweeper::Board.new(1,1,0)).to respond_to method
+      end
+    end
+
     describe "#initialize" do
+
       it "with static bombs" do
         bombs = [
           [1, 0, 0],
@@ -242,12 +243,26 @@ RSpec.describe Minesweeper do
           [0, 0, 1]
         ]
         board = Minesweeper::Board.new(3,3,2,bombs)
+        expect(board.width).to eq(3)
+        expect(board.height).to eq(3)
+        expect(board.num_mines).to eq(2)
         expect(board.count_bombs).to eq(2)
       end
 
       it "with random bombs" do
         board = Minesweeper::Board.new(10,20,25)
+        expect(board.width).to eq(10)
+        expect(board.height).to eq(20)
+        expect(board.num_mines).to eq(25)
         expect(board.count_bombs).to eq(25)
+      end
+    end
+
+    describe "#toggle_flag" do
+      board = Minesweeper::Board.new(1,1,0)
+      it "set and unset a flag in the board" do
+        expect(board.toggle_flag(0, 0)).to eq(true)
+        expect(board.toggle_flag(0, 0)).to eq(true)
       end
     end
 
