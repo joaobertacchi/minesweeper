@@ -212,7 +212,9 @@ RSpec.describe Minesweeper do
 
     describe '#print' do
       it 'all states' do
-        expect{Minesweeper::SimplePrinter.new.print(@board_state)}.to output("# . 3 F  \n4 4 4 4 4\n").to_stdout
+        expect{
+          Minesweeper::SimplePrinter.new.print(@board_state)
+        }.to output("# . 3 F  \n4 4 4 4 4\n").to_stdout
       end
     end
 
@@ -303,11 +305,11 @@ RSpec.describe Minesweeper do
         Minesweeper::SimplePrinter.new.print(board.board_state)
         expect(board.board_state).to eq(
           [
-            [:clear_cell,           2, :unknown_cell, :unknown_cell, :unknown_cell],
-            [:clear_cell,           2, :unknown_cell, :unknown_cell, :unknown_cell],
-            [:clear_cell,           2, :unknown_cell, :unknown_cell, :unknown_cell],
-            [:clear_cell,           1, :unknown_cell, :unknown_cell, :unknown_cell],
-            [:clear_cell,           1, :unknown_cell, :unknown_cell, :unknown_cell]
+            [:clear_cell, 2, :unknown_cell, :unknown_cell, :unknown_cell],
+            [:clear_cell, 2, :unknown_cell, :unknown_cell, :unknown_cell],
+            [:clear_cell, 2, :unknown_cell, :unknown_cell, :unknown_cell],
+            [:clear_cell, 1, :unknown_cell, :unknown_cell, :unknown_cell],
+            [:clear_cell, 1, :unknown_cell, :unknown_cell, :unknown_cell]
           ]
         )
       end
