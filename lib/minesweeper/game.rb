@@ -62,12 +62,16 @@ module Minesweeper
       @board.board_state(config)
     end
 
-    ##
+    #
     # Returns true if the game is over and the player won. Return false otherwise.
 
     def victory?
       ((not @playing) and (not @board.exploded?))
     end
-    
+
+    # @private
+    def board=(board)
+      @board = board
+    end
   end
 end

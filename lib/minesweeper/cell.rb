@@ -38,8 +38,9 @@ module Minesweeper
     end
 
     def state(xray=false)
-      return :flag if ((self.flag?) and (not xray))
-      return :unknown_cell if not self.open? and not xray
+      return :bomb if self.bomb? and xray
+      return :flag if self.flag?
+      return :unknown_cell if not self.open?
       return :bomb if self.bomb?
       return self.neighbor_bombs if self.neighbor_bombs > 0
       return :clear_cell

@@ -108,18 +108,18 @@ describe Minesweeper::Cell do
     end
     
     it 'with xray' do
-      clear_cell = Minesweeper::Cell.new(bomb=false, flag=false, open=false, neighbor_bombs=0)
+      empty_cell = Minesweeper::Cell.new(bomb=false, flag=false, open=false, neighbor_bombs=0)
       numeric_cell = Minesweeper::Cell.new(bomb=false, flag=false, open=false, neighbor_bombs=4)
       bomb_cell = Minesweeper::Cell.new(bomb=true, flag=false, open=false, neighbor_bombs=0)
       flag_and_bomb_cell = Minesweeper::Cell.new(bomb=true, flag=true, open=false, neighbor_bombs=0)
-      flag_and_clear_cell = Minesweeper::Cell.new(bomb=false, flag=true, open=false, neighbor_bombs=0)
+      flag_and_empty_cell = Minesweeper::Cell.new(bomb=false, flag=true, open=false, neighbor_bombs=0)
       flag_and_numeric_cell = Minesweeper::Cell.new(bomb=false, flag=true, open=false, neighbor_bombs=3)
-      expect(clear_cell.state(true)).to eq(:clear_cell)
-      expect(numeric_cell.state(true)).to eq(4)
+      expect(empty_cell.state(true)).to eq(:unknown_cell)
+      expect(numeric_cell.state(true)).to eq(:unknown_cell)
       expect(bomb_cell.state(true)).to eq(:bomb)
       expect(flag_and_bomb_cell.state(true)).to eq(:bomb)
-      expect(flag_and_clear_cell.state(true)).to eq(:clear_cell)
-      expect(flag_and_numeric_cell.state(true)).to eq(3)
+      expect(flag_and_empty_cell.state(true)).to eq(:flag)
+      expect(flag_and_numeric_cell.state(true)).to eq(:flag)
     end
     
   end

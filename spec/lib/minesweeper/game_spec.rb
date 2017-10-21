@@ -112,5 +112,50 @@ describe Minesweeper::Game do
       expect(game.victory?).to eq(false)
     end
   end
+
+  describe '#board_state' do
+    it 'xray does not work for an unfinished game' do
+      bombs = [
+        [1,0,0,0,0],
+        [0,0,0,0,0],
+        [0,0,1,0,0],
+        [0,0,0,0,0],
+        [0,0,0,0,0]
+      ]
+      expected_board_state = [
+        [:unknown_cell, :unknown_cell, :unknown_cell, :unknown_cell, :unknown_cell],
+        [:unknown_cell, :unknown_cell, :unknown_cell, :unknown_cell, :unknown_cell],
+        [:unknown_cell, :unknown_cell, :unknown_cell, :unknown_cell, :unknown_cell],
+        [:unknown_cell, :unknown_cell, :unknown_cell, :unknown_cell, :unknown_cell],
+        [:unknown_cell, :unknown_cell, :unknown_cell, :unknown_cell, :unknown_cell]
+      ]
+      board = Minesweeper::Board.new(5, 5, 2, bombs)
+      game = Minesweeper::Game.new(5, 5, 2)
+      game.board = board
+      expect(game.board_state({xray: true})).to eq(expected_board_state)
+    end
+
+    it 'xray works for finished game' do
+      bombs = [
+        [1,0,0,0,0],
+        [0,0,0,0,0],
+        [0,0,1,0,0],
+        [0,0,0,0,0],
+        [0,0,0,0,0]
+      ]
+      expected_board_state = [
+        [        :bomb, :unknown_cell, :unknown_cell, :unknown_cell, :unknown_cell],
+        [:unknown_cell, :unknown_cell, :unknown_cell, :unknown_cell, :unknown_cell],
+        [:unknown_cell, :unknown_cell,         :bomb, :unknown_cell, :unknown_cell],
+        [:unknown_cell, :unknown_cell, :unknown_cell, :unknown_cell, :unknown_cell],
+        [:unknown_cell, :unknown_cell, :unknown_cell, :unknown_cell, :unknown_cell]
+      ]
+      board = Minesweeper::Board.new(5, 5, 2, bombs)
+      game = Minesweeper::Game.new(5, 5, 2)
+      game.board = board
+      game.play(0, 0) # Force game to finish with a explosion
+      expect(game.board_state({xray: true})).to eq(expected_board_state)
+    end
+  end
   
 end
