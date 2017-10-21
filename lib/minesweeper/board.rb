@@ -17,6 +17,13 @@ module Minesweeper
 
       init_board(bombs_position)
       set_neighbor_bombs
+
+      actual_num_mines = count_bombs
+      actual_height = @board_cells.size
+      actual_width = @board_cells[0].size
+      raise "num_mines=#{@num_mines} and actual number of mines in bombs_position (#{actual_num_mines}) does not match" if actual_num_mines != @num_mines
+      raise "height=#{@height} and actual height in bombs_position (#{actual_height}) does not match" if actual_height != @height
+      raise "width=#{@width} and actual width in bombs_position (#{actual_width}) does not match" if actual_width != @width
     end
 
     def exploded?
@@ -24,10 +31,6 @@ module Minesweeper
     end
 
     def closed_cells_without_bomb
-    end
-
-    def state(row, col)
-      @board_cells[row][col].state
     end
     
     def board_state(config={})
@@ -37,16 +40,6 @@ module Minesweeper
       @board_cells.map do |line|
         line.map{|cell| cell.state(xray)}
       end
-    end
-
-    def count_bombs
-      bombs = 0
-      @board_cells.each do |line|
-        line.each do |cell|
-          bombs += 1 if cell.bomb?
-        end
-      end
-      bombs
     end
 
     def expand(row, col)
@@ -81,6 +74,20 @@ module Minesweeper
     end
 
     private
+    def state(row, col)
+      @board_cells[row][col].state
+    end
+
+    def count_bombs
+      bombs = 0
+      @board_cells.each do |line|
+        line.each do |cell|
+          bombs += 1 if cell.bomb?
+        end
+      end
+      bombs
+    end
+
     def init_board(bombs_position)
       if bombs_position.nil? then
         bombs_position = random_bombs_position
@@ -141,6 +148,5 @@ module Minesweeper
         not @board_cells[i][j].open? and not @board_cells[i][j].bomb? and not @board_cells[i][j].flag?
       end
     end
-
   end
 end

@@ -3,7 +3,7 @@ require 'minesweeper/board'
 
 describe Minesweeper::Board do
 
-  [:state, :expand, :toggle_flag].each do |method|
+  [:board_state, :expand, :toggle_flag, :exploded?].each do |method|
     it "responds to #{method}" do
       expect(Minesweeper::Board.new(1, 1, 0)).to respond_to method
     end
@@ -21,7 +21,6 @@ describe Minesweeper::Board do
       expect(board.width).to eq(3)
       expect(board.height).to eq(3)
       expect(board.num_mines).to eq(2)
-      expect(board.count_bombs).to eq(2)
     end
 
     it 'with random bombs' do
@@ -29,7 +28,6 @@ describe Minesweeper::Board do
       expect(board.width).to eq(10)
       expect(board.height).to eq(20)
       expect(board.num_mines).to eq(25)
-      expect(board.count_bombs).to eq(25)
     end
   end
 
