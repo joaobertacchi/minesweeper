@@ -9,9 +9,9 @@ Gem::Specification.new do |spec|
   spec.authors       = ["João Eduardo Ferreira Bertacchi"]
   spec.email         = ["joaobertacchi@gmail.com"]
 
-  spec.summary       = "Library to handle a Minesweeper game"
-  # spec.description   = %q{TODO: Write a longer description or delete this line.}
-  # spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.summary       = "Library to create a Minesweeper game"
+  spec.description   = %q{Minesweeper library to create minesweeper games.}
+  spec.homepage      = "Thttps://bitbucket.org/joaobertacchi/minesweeper"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
@@ -35,6 +35,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec", "~> 3.0"
   spec.add_development_dependency "autotest-standalone", "~> 4.5"
   spec.add_development_dependency "rspec-autotest", "~> 1.0"
-  spec.add_development_dependency "simplecov"
-  spec.add_development_dependency 'yard-contracts'
+  spec.add_development_dependency "simplecov", "~> 0.15"
+  spec.add_development_dependency 'yard-contracts', '~> 0.1.5'
+  spec.add_development_dependency 'pry', '~> 0.11.2'
 end
