@@ -2,7 +2,6 @@ require 'contracts'
 
 module Minesweeper
 
-  #
   # This class represents a minesweeper game
 
   class Game
