@@ -1,5 +1,4 @@
-minesweeper_lib_dir = File.join(File.dirname(__FILE__), "..", 'lib')
-$:.unshift(minesweeper_lib_dir)
+#!/usr/bin/env ruby
 
 require 'minesweeper'
 
