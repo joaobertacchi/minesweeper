@@ -1,8 +1,52 @@
 # Minesweeper
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/minesweeper`. To experiment with that code, run `bin/console` for an interactive prompt.
+Minesweeper is a library to help you creating your brand new minesweeper game.
+For creating a new game, the only thing you need is a game object.
 
-TODO: Delete this and the text above, and describe your gem
+Use the following example from bin/sample_cli as a guideline. To test sample_cli
+without installing minesweeper gem, run:
+
+```bash
+git clone https://bitbucket.org/joaobertacchi/minesweeper.git
+cd minesweeper
+ruby -Ilib ./bin/sample_cli
+```
+
+```ruby
+require 'minesweeper'
+
+puts "Type width, height, num_mines separated by spaces:"
+width, height, num_mines = gets.split(' ').map{|e| e.to_i}
+game = Minesweeper::Game.new(width, height, num_mines)
+printer = Minesweeper::SimplePrinter.new
+
+while game.still_playing?
+  printer.print(game.board_state)
+  puts
+  puts "What is your next move:"
+  type, row, col = gets.split(' ')
+  if type == 'F' then
+    valid_flag = game.flag(row.to_i, col.to_i)
+  elsif type == 'P' then
+    valid_move = game.play(row.to_i, col.to_i)
+  else
+    valid_move = false
+  end
+  
+  if not valid_move
+    puts 'Invalid move!!! Try again!'
+  end
+end
+
+puts "Fim do jogo!"
+if game.victory?
+  puts "Você venceu!"
+  printer.print(game.board_state(xray: true))
+else
+  puts "Você perdeu! As minas eram:"
+  printer.print(game.board_state(xray: true))
+end
+```
 
 ## Installation
 
@@ -22,8 +66,7 @@ Or install it yourself as:
 
 ## Usage
 
-To access Minesweeper API, run `bundle exec yardoc`. It creates html documentation in doc directory. Open doc/index.html
-in your web browser.
+To access Minesweeper API, run `bundle exec yardoc`. It creates html documentation in doc directory. Open doc/index.html in your web browser.
 
 ## Development
 
