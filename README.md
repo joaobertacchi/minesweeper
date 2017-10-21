@@ -22,8 +22,8 @@ Or install it yourself as:
 
 ## Usage
 
-To access Minesweeper API, run `rdoc`. It creates html documentation in doc directory. Open doc/index.html
-in a browser.
+To access Minesweeper API, run `bundle exec yardoc`. It creates html documentation in doc directory. Open doc/index.html
+in your web browser.
 
 ## Development
 

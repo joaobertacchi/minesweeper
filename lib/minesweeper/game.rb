@@ -1,10 +1,15 @@
+require 'contracts'
+
 module Minesweeper
 
-  ##
+  #
   # This class represents a minesweeper game
 
   class Game
+    include Contracts::Core
+    C = Contracts
     
+    Contract C::Pos, C::Pos, C::Pos => C::Any
     def initialize(width, height, num_mines)
       @board = Board.new(width, height, num_mines)
       @playing = true
@@ -14,11 +19,13 @@ module Minesweeper
       @playing
     end
     
-    ##
-    # Open the cell located at (row, col) position. Returns a boolean to signal
-    # ithe move is validity. A move is valid if the cell is closed and
-    # unflagged.
-
+    # Open the cell located at (row, col) position. A play is deemed valid if the cell
+    # was closed and unflagged before it happens.
+    #
+    # @param row a non-negative integer
+    # @param col a non-negative integer
+    # @return a boolean to indicate if the move was valid
+    Contract C::Nat, C::Nat => C::Bool
     def play(row, col)
       return false if not @playing
       is_valid = @board.expand(row,col)
@@ -26,17 +33,19 @@ module Minesweeper
       is_valid
     end
     
-    ##
     # Adds/removes a flag to/from a closed cell at row and col position on the
     # board.
-    # Returns a boolean to inform the validity of the play.
-
+    #
+    # @param row a non-negative integer
+    # @param col a non-negative integer
+    # @return a boolean to inform if the flag placement was valid
+    Contract C::Nat, C::Nat => C::Bool
     def flag(row, col)
       return false if not @playing
       @board.toggle_flag(row, col)
     end
     
-    ##
+    #
     # Returns the current board representation as a height X width matrix.
     # Each matrix element may have the following states:
     # - :unknown_cell - closed cell
