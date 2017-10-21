@@ -21,17 +21,17 @@ describe Minesweeper::Game do
       expect{ Minesweeper::Game.new(5, 5, 26) }.to raise_error(RuntimeError)
     end
     
-    # it "with non integer width" do
-    #   expect{ Minesweeper::Game.new(:a,5,25) }.to raise_error(ArgumentError)
-    # end
+    it "with non integer width" do
+      expect{ Minesweeper::Game.new(:a,5,25) }.to raise_error(ArgumentError)
+    end
     
-    # it "with non integer height" do
-    #   expect{ Minesweeper::Game.new(5, :a,25) }.to raise_error(ArgumentError)
-    # end
+    it "with non integer height" do
+      expect{ Minesweeper::Game.new(5, :a,25) }.to raise_error(ArgumentError)
+    end
     
-    # it "with non integer num_mines" do
-    #   expect{ Minesweeper::Game.new(5, 5, :a) }.to raise_error(ArgumentError)
-    # end
+    it "with non integer num_mines" do
+      expect{ Minesweeper::Game.new(5, 5, :a) }.to raise_error(ArgumentError)
+    end
   end
   
   describe '#still_playing?' do
