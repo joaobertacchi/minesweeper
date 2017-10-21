@@ -138,7 +138,7 @@ module Minesweeper
       neighbor_coordinates(row, col).select do |coordinate|
         i = coordinate[0]
         j = coordinate[1]
-        not @board_cells[i][j].open? and not @board_cells[i][j].bomb?
+        not @board_cells[i][j].open? and not @board_cells[i][j].bomb? and not @board_cells[i][j].flag?
       end
     end
 

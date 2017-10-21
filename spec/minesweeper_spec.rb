@@ -347,6 +347,69 @@ RSpec.describe Minesweeper do
           ]
         )
       end
+
+      it 'board with a single flag in the middle (CASE 3)' do
+        board = Minesweeper::Board.new(5, 5, 0)
+        board.toggle_flag(2, 2)
+        board.expand(0, 0)
+
+        Minesweeper::SimplePrinter.new.print(board.board_state)
+        expect(board.board_state).to eq(
+          [
+            [:clear_cell, :clear_cell, :clear_cell, :clear_cell, :clear_cell],
+            [:clear_cell, :clear_cell, :clear_cell, :clear_cell, :clear_cell],
+            [:clear_cell, :clear_cell,       :flag, :clear_cell, :clear_cell],
+            [:clear_cell, :clear_cell, :clear_cell, :clear_cell, :clear_cell],
+            [:clear_cell, :clear_cell, :clear_cell, :clear_cell, :clear_cell]
+          ]
+        )
+      end
+
+      it 'board with bombs and a flag in a correct place (CASE 4)' do
+        bombs = [
+          [0,0,1,0,0],
+          [0,0,1,0,0],
+          [0,0,0,1,0],
+          [0,0,1,0,0],
+          [0,0,0,1,0]
+        ]
+        board = Minesweeper::Board.new(5, 5, 5, bombs)
+        board.toggle_flag(0, 2)
+        board.expand(0, 0)
+        Minesweeper::SimplePrinter.new.print(board.board_state)
+        expect(board.board_state).to eq(
+          [
+            [:clear_cell, 2,         :flag, :unknown_cell, :unknown_cell],
+            [:clear_cell, 2, :unknown_cell, :unknown_cell, :unknown_cell],
+            [:clear_cell, 2, :unknown_cell, :unknown_cell, :unknown_cell],
+            [:clear_cell, 1, :unknown_cell, :unknown_cell, :unknown_cell],
+            [:clear_cell, 1, :unknown_cell, :unknown_cell, :unknown_cell]
+          ]
+        )
+      end
+
+      it 'board with bombs and a flag in a wrong place (CASE 5)' do
+        bombs = [
+          [0,0,1,0,0],
+          [0,0,1,0,0],
+          [0,0,1,1,0],
+          [0,0,0,0,1],
+          [0,0,0,0,0]
+        ]
+        board = Minesweeper::Board.new(5, 5, 5, bombs)
+        board.toggle_flag(4, 1)
+        board.expand(0, 0)
+        Minesweeper::SimplePrinter.new.print(board.board_state)
+        expect(board.board_state).to eq(
+          [
+            [:clear_cell,           2, :unknown_cell, :unknown_cell, :unknown_cell],
+            [:clear_cell,           3, :unknown_cell, :unknown_cell, :unknown_cell],
+            [:clear_cell,           2, :unknown_cell, :unknown_cell, :unknown_cell],
+            [:clear_cell,           1, :unknown_cell, :unknown_cell, :unknown_cell],
+            [:clear_cell,       :flag, :unknown_cell, :unknown_cell, :unknown_cell],
+          ]
+        )
+      end
     end
   end
 end
