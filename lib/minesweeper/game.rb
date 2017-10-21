@@ -8,7 +8,7 @@ module Minesweeper
     include Contracts::Core
     C = Contracts
     
-    Contract C::Pos, C::Pos, C::Pos => C::Any
+    Contract C::Pos, C::Pos, C::Nat => C::Any
     def initialize(width, height, num_mines)
       @board = Board.new(width, height, num_mines)
       @playing = true

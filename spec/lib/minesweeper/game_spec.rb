@@ -63,7 +63,54 @@ describe Minesweeper::Game do
       #expect(@game.board_state(xray: true)).not_to eq(nil)
       expect(@game).to respond_to(:board_state)
     end
-    
+  end
+
+  describe '#still_playing?' do
+    it 'unfinished game' do
+      game = Minesweeper::Game.new(10, 10, 10)
+      expect(game.still_playing?).to eq(true)
+    end
+
+    it 'game with no bombs' do
+      game = Minesweeper::Game.new(10, 10, 0)
+      expect(game.still_playing?).to eq(true)
+    end
+
+    it 'finished with victory' do
+      game = Minesweeper::Game.new(10, 10, 0)
+      game.play(0, 0)
+      expect(game.still_playing?).to eq(false)
+    end
+
+    it 'finished with defeat' do
+      game = Minesweeper::Game.new(10, 10, 100)
+      game.play(0, 0)
+      expect(game.still_playing?).to eq(false)
+    end
+  end
+
+  describe '#victory?' do
+    it 'unfinished game' do
+      game = Minesweeper::Game.new(10, 10, 10)
+      expect(game.victory?).to eq(false)
+    end
+
+    it 'game with no bombs' do
+      game = Minesweeper::Game.new(10, 10, 0)
+      expect(game.victory?).to eq(false)
+    end
+
+    it 'finished with victory' do
+      game = Minesweeper::Game.new(10, 10, 0)
+      game.play(0, 0)
+      expect(game.victory?).to eq(true)
+    end
+
+    it 'finished with defeat' do
+      game = Minesweeper::Game.new(10, 10, 100)
+      game.play(0, 0)
+      expect(game.victory?).to eq(false)
+    end
   end
   
 end
