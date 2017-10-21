@@ -13,6 +13,8 @@ ruby -Ilib ./bin/sample_cli
 ```
 
 ```ruby
+#!/usr/bin/env ruby
+
 require 'minesweeper'
 
 puts "Type width, height, num_mines separated by spaces:"
@@ -38,12 +40,12 @@ while game.still_playing?
   end
 end
 
-puts "Fim do jogo!"
+puts "Game over!"
 if game.victory?
-  puts "Você venceu!"
+  puts "You won!"
   printer.print(game.board_state(xray: true))
 else
-  puts "Você perdeu! As minas eram:"
+  puts "You lose! Mine were at:"
   printer.print(game.board_state(xray: true))
 end
 ```
