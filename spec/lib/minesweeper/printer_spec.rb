@@ -17,7 +17,7 @@ end
 describe '#print' do
   it 'all states' do
     expect{
-    Minesweeper::SimplePrinter.new.print(@board_state)
+    Minesweeper::SimplePrinter.new(true).print(@board_state)
   }.to output("# . 3 F  \n4 4 4 4 4\n").to_stdout
 end
 end

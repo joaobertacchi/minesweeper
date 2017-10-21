@@ -1,0 +1,36 @@
+minesweeper_lib_dir = File.join(File.dirname(__FILE__), "..", 'lib')
+$:.unshift(minesweeper_lib_dir)
+
+require 'minesweeper'
+
+puts "Type width, height, num_mines separated by spaces:"
+width, height, num_mines = gets.split(' ').map{|e| e.to_i}
+game = Minesweeper::Game.new(width, height, num_mines)
+printer = Minesweeper::SimplePrinter.new
+
+while game.still_playing?
+  printer.print(game.board_state)
+  puts
+  puts "What is your next move:"
+  type, row, col = gets.split(' ')
+  if type == 'F' then
+    valid_flag = game.flag(row.to_i, col.to_i)
+  elsif type == 'P' then
+    valid_move = game.play(row.to_i, col.to_i)
+  else
+    valid_move = false
+  end
+  
+  if not valid_move
+    puts 'Invalid move!!! Try again!'
+  end
+end
+
+puts "Fim do jogo!"
+if game.victory?
+  puts "Você venceu!"
+  printer.print(game.board_state(xray: true))
+else
+  puts "Você perdeu! As minas eram:"
+  printer.print(game.board_state(xray: true))
+end
