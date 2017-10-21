@@ -1,19 +1,26 @@
+require 'contracts'
+
 module Minesweeper
   
   class Board
-    attr_accessor :width, :height, :num_mines
+    include Contracts::Core
+    include Contracts::Builtin
+    C = Contracts
 
-    ##
+    attr_reader :width, :height, :num_mines
+
     # width, height, and num_mines are integers. num_mines must be <= width*height
     # bombs_position is an matrix of height X width dimension. Its elements are
     # 1 to indicate a bomb and 0 to indicate no-bomb.
-
+    Contract C::Pos, C::Pos, C::Nat, C::Maybe[C::ArrayOf[C::ArrayOf[C::Nat]]] => C::Any
     def initialize(width, height, num_mines, bombs_position=nil)
       raise "num_mines should be <= width*height" if num_mines > width*height
       @width = width
       @height = height
       @num_mines = num_mines
       @exploded = false
+
+      @current_num_non_mines = @width*@height - @num_mines
 
       init_board(bombs_position)
       set_neighbor_bombs
@@ -30,9 +37,12 @@ module Minesweeper
       @exploded
     end
 
+    Contract C::None => C::Nat
     def closed_cells_without_bomb
+      @current_num_non_mines
     end
     
+    Contract C::Maybe[C::KeywordArgs[:xray => C::Bool]] => C::ArrayOf[C::ArrayOf[Or[Symbol, C::Pos]]]
     def board_state(config={})
       xray = false
       xray = config[:xray] if config.key?(:xray)
@@ -42,11 +52,11 @@ module Minesweeper
       end
     end
 
+    Contract C::Nat, C::Nat => C::Bool
     def expand(row, col)
-      valid = @board_cells[row][col].play
-      return false if not valid
+      valid = play_and_track_non_mines_and_explosion(row, col)
 
-      @exploded = @board_cells[row][col].bomb?
+      return false if not valid
       return valid if @exploded
       
       expansion_candidates = []
@@ -59,7 +69,9 @@ module Minesweeper
           closed_neighbor_coordinates_without_bomb(i, j).each do |coordinate|
             x = coordinate[0]
             y = coordinate[1]
-            @board_cells[x][y].play
+
+            play_and_track_non_mines_and_explosion(x, y)
+
             expansion_candidates.push(coordinate)
           end
         end
@@ -69,11 +81,23 @@ module Minesweeper
       valid
     end
 
+    Contract C::Nat, C::Nat => C::Bool
     def toggle_flag(row, col)
       @board_cells[row][col].toggle_flag
     end
 
     private
+    def play_and_track_non_mines_and_explosion(row, col)
+      is_valid = @board_cells[row][col].play
+
+      if is_valid then
+        @current_num_non_mines -= 1 if (not @board_cells[row][col].bomb?)
+        @exploded = @board_cells[row][col].bomb? if not @exploded
+      end
+
+      is_valid
+    end
+
     def state(row, col)
       @board_cells[row][col].state
     end
@@ -102,8 +126,8 @@ module Minesweeper
     end
 
     def random_bombs_position
-      num_non_mines = @width*@height - @num_mines
-      shuffled_bombs = (Array.new(@num_mines){1} + Array.new(num_non_mines){0}).shuffle
+      initial_num_non_mines = @width*@height - @num_mines
+      shuffled_bombs = (Array.new(@num_mines){1} + Array.new(initial_num_non_mines){0}).shuffle
       shuffled_bombs.each_slice(@width).to_a
     end
 
