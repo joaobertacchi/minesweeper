@@ -1,16 +1,9 @@
 # Minesweeper
 
-Minesweeper is a library to help you creating your brand new minesweeper game.
+Minesweeper is a library for you to create your brand new minesweeper game.
 For creating a new game, the only thing you need is a game object.
 
-Use the following example from bin/sample_cli as a guideline. To test sample_cli
-without installing minesweeper gem, run:
-
-```bash
-git clone https://bitbucket.org/joaobertacchi/minesweeper.git
-cd minesweeper
-ruby -Ilib ./bin/sample_cli
-```
+Use the following example from bin/sample_cli as a guideline.
 
 ```ruby
 #!/usr/bin/env ruby
@@ -50,29 +43,54 @@ else
 end
 ```
 
-## Installation
+To test sample_cli without installing minesweeper gem, run:
 
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'minesweeper'
+```bash
+git clone https://bitbucket.org/joaobertacchi/minesweeper.git
+cd minesweeper
+ruby -Ilib ./bin/sample_cli
 ```
 
-And then execute:
+## Installation
 
-    $ bundle
+Currently minesweeper is not available at RubyGems.org.
+That means you will have to install it from source.
 
-Or install it yourself as:
+Checkout the repo:
 
-    $ gem install minesweeper
+```bash
+git clone https://bitbucket.org/joaobertacchi/minesweeper.git
+```
+
+And install it:
+
+```bash
+cd minesweeper
+bundle exec rake install
+```
 
 ## Usage
 
-To access Minesweeper API, run `bundle exec yardoc`. It creates html documentation in doc directory. Open doc/index.html in your web browser.
+The only classe you should need to create your game are Minesweeper::Game.
+Minesweeper::SimplePrinter and Minesweeper::PrettyPrinter could also be handful if you
+intend to create a console game.
+
+To make the Minesweeper module available in your code:
+
+```ruby
+require 'minesweeper'
+```
+
+Refer to Minesweeper API for further instructions.
+To create the html API documentation, run `bundle exec yardoc` from minesweeper repo.
+Open doc/index.html in your prefered web browser.
+
 
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+
+After running `rake spec`, coverage report will be created and placed in ./coverage directory.
 
 To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 

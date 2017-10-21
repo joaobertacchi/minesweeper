@@ -1,9 +1,9 @@
 require 'contracts'
 
+# Minesweeper module contains all the classes you need to create a minesweeper game
 module Minesweeper
 
   # This class represents a minesweeper game
-
   class Game
     include Contracts::Core
     C = Contracts
