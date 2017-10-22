@@ -1,11 +1,7 @@
+require 'colorize'
+
 module Minesweeper
   class Printer
-    def print(board_state)
-      raise 'not implemented'
-    end
-  end
-
-  class SimplePrinter < Printer
 
     def initialize(raw=false)
       @board_format = {
@@ -22,24 +18,38 @@ module Minesweeper
 
       board_state.each_with_index do |line, index|
         line_str = "%s "*line.size % line.map{|cell| (cell.is_a?(Numeric) ? cell.to_s : @board_format[cell]) }
-        puts (@raw ? '' : line_header(index)) + line_str[0..-2]
+        puts (@raw ? '' : transform(line_header(index))) + line_str[0..-2]
       end
     end
 
-    private
+    protected
+    def transform(text)
+      text
+    end
+
     def print_header(space, board_state)
-      puts ' '*space + (0..(board_state[0].size-1)).to_a.join(' ')
-      puts ' '*space + '_' * (board_state[0].size * 2 - 1)
+      header(space, board_state).each do |line|
+        puts transform(line)
+      end
+    end
+
+    def header(space, board_state)
+      [ ' '*space + (0..(board_state[0].size-1)).to_a.join(' '),
+        ' '*space + '_' * (board_state[0].size * 2 - 1)]
     end
 
     def line_header(line_number)
       line_number.to_s + '|'
     end
+  end
 
+  class SimplePrinter < Printer
   end
 
   class PrettyPrinter < Printer
-    # def initialize
-    # end
+    protected
+    def transform(text)
+      text.colorize(:red)
+    end
   end
 end
