@@ -86,7 +86,7 @@ bundle exec rake install
 
 ## Usage
 
-The only classe you should need to create your game are Minesweeper::Game.
+The only classe you need to create your game is Minesweeper::Game.
 Minesweeper::SimplePrinter and Minesweeper::PrettyPrinter could also be handful if you
 intend to create a console game.
 
