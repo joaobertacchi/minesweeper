@@ -5,7 +5,7 @@ require 'minesweeper/version'
 Gem::Specification.new do |spec|
   spec.name          = 'minesweeper'
   spec.version       = Minesweeper::VERSION
-  spec.authors       = ['João Eduardo Ferreira Bertacchi']
+  spec.authors       = ['Joao Eduardo Ferreira Bertacchi']
   spec.email         = ['joaobertacchi@gmail.com']
 
   spec.summary       = 'Library to create a Minesweeper game'
