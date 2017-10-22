@@ -33,7 +33,7 @@ module Minesweeper
     end
 
     def line_body(line, index)
-      "%s "*line.size % line.map{|cell| (cell.is_a?(Numeric) ? cell.to_s : @board_format[cell]) }
+      line.map{|cell| (cell.is_a?(Numeric) ? cell.to_s : @board_format[cell]) }.join(' ')
     end
 
     def print_header(space, board_state)
