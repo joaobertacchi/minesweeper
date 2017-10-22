@@ -113,10 +113,7 @@ module Minesweeper
       is_valid
     end
 
-    def state(row, col)
-      @board_cells[row][col].state
-    end
-
+    # @private
     def count_bombs
       bombs = 0
       @board_cells.each do |line|
