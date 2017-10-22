@@ -1,7 +1,12 @@
 require 'colorize'
+require 'contracts'
 
 module Minesweeper
   class Printer
+    include Contracts::Core
+    include Contracts::Builtin
+    C = Contracts
+
     def initialize(raw = false)
       @board_format = {
         unknown_cell: '.',
@@ -12,6 +17,7 @@ module Minesweeper
       @raw = raw
     end
 
+    Contract C::ArrayOf[C::ArrayOf[Or[Symbol, C::Pos]]] => C::Any
     def print(board_state)
       print_header(2, board_state) unless @raw
 
@@ -51,10 +57,81 @@ module Minesweeper
     end
   end
 
+  # Class used for printing a board_state.
+  # Refer to Minesweeper::Game#board_state for checking board_state format.
+  #
+  # This printer uses the following symbols:
+  # - # : bomb
+  # - F : flag
+  # - <number> : number of neighbor bombs
+  # - . : closed cell
+  #
+  # Example
+  #
+  #    0 1 2 3 4
+  #    _________
+  #  0|F 1      
+  #  1|2 2      
+  #  2|# 1      
+  #  3|1 1   1 1
+  #  4|      1 #
+  #  
+  #  5 x 5 board_state with all states
+  #
   class SimplePrinter < Printer
+    include Contracts::Core
+    include Contracts::Builtin
+    C = Contracts
   end
 
+  # Class used for printing a board_state.
+  # Refer to Minesweeper::Game#board_state for checking board_state format.
+  #
+  # This printer uses the following color code and symbols:
+  # - red (b) : bomb
+  # - yellow (P) : flag
+  # - white (<number>) : number of neighbor bombs
+  # - white (.) : closed cell
+  #
+  # Example 1
+  #
+  #       0|  1|  2|  3|  4|
+  #     ---|---|---|---|---|
+  #   0| . | . | . | . | . |
+  #    |---|---|---|---|---|
+  #   1| . | . | . | . | . |
+  #    |---|---|---|---|---|
+  #   2| . | . | . | . | . |
+  #    |---|---|---|---|---|
+  #   3| . | . | . | . | . |
+  #    |---|---|---|---|---|
+  #   4| . | . | . | . | . |
+  #    |---|---|---|---|---|
+  #   
+  #   5 x 5 board_state with all cells closed
+  #
+  # Example 2
+  #
+  #       0|  1|  2|
+  #     ---|---|---|
+  #   0|   |   |   |
+  #    |---|---|---|
+  #   1| 1 | 1 | 1 |
+  #    |---|---|---|
+  #   2| 1 | P | 1 |
+  #    |---|---|---|
+  #   3| 2 | 2 | 2 |
+  #    |---|---|---|
+  #   4| 1 | b | 1 |
+  #    |---|---|---|
+  #   
+  #   5 x 3 board_state with open cells, a flag (P), a bomb (b), and numbers
+  #
   class PrettyPrinter < Printer
+    include Contracts::Core
+    include Contracts::Builtin
+    C = Contracts
+
     def initialize(raw = false)
       @board_format = {
         unknown_cell: '.',
