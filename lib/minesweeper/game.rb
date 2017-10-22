@@ -41,7 +41,7 @@ module Minesweeper
     #
     # @param row a non-negative integer
     # @param col a non-negative integer
-    # @return a boolean to inform if the flag placement was valid
+    # @return a boolean to inform if the flag placement was valid. Only closed cells can be tagged with a flag.
     Contract C::Nat, C::Nat => C::Bool
     def flag(row, col)
       raise "row must be less than #{@board.height}" if row >= @board.height
