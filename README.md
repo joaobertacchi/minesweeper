@@ -13,10 +13,11 @@ require 'minesweeper'
 valid_input = false
 while !valid_input do
   begin
-    puts 'Type width, height, num_mines separated by spaces:'
-    width, height, num_mines = STDIN.gets.chomp.split(' ').map(&:to_i)
+    puts 'Type height, width, num_mines separated by spaces:'
+    height, width, num_mines = STDIN.gets.chomp.split(' ').map(&:to_i)
     game = Minesweeper::Game.new(width, height, num_mines)
     printer = (ARGV[0] == '--pretty' ? Minesweeper::PrettyPrinter.new : Minesweeper::SimplePrinter.new)
+    valid_input = true
   rescue => exception
     puts 'Wrong input. Try again!'
   end
