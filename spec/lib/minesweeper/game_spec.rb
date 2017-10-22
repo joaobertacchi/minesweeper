@@ -3,10 +3,12 @@ require 'minesweeper/game'
 
 describe Minesweeper::Game do
   before :each do
-    width, height, num_mines = 10, 20, 50
+    width = 10
+    height = 20
+    num_mines = 50
     @game = Minesweeper::Game.new(width, height, num_mines)
   end
-  [:still_playing?, :play, :flag, :board_state, :victory?].each do |method|
+  %i[still_playing? play flag board_state victory?].each do |method|
     it "responds to #{method}" do
       expect(@game).to respond_to method
     end
@@ -109,11 +111,11 @@ describe Minesweeper::Game do
         [0, 0, 0, 0, 0]
       ]
       expected_board_state = [
-        [:unknown_cell, :unknown_cell, :unknown_cell, :unknown_cell, :unknown_cell],
-        [:unknown_cell, :unknown_cell, :unknown_cell, :unknown_cell, :unknown_cell],
-        [:unknown_cell, :unknown_cell, :unknown_cell, :unknown_cell, :unknown_cell],
-        [:unknown_cell, :unknown_cell, :unknown_cell, :unknown_cell, :unknown_cell],
-        [:unknown_cell, :unknown_cell, :unknown_cell, :unknown_cell, :unknown_cell]
+        %i[unknown_cell unknown_cell unknown_cell unknown_cell unknown_cell],
+        %i[unknown_cell unknown_cell unknown_cell unknown_cell unknown_cell],
+        %i[unknown_cell unknown_cell unknown_cell unknown_cell unknown_cell],
+        %i[unknown_cell unknown_cell unknown_cell unknown_cell unknown_cell],
+        %i[unknown_cell unknown_cell unknown_cell unknown_cell unknown_cell]
       ]
       board = Minesweeper::Board.new(5, 5, 2, bombs)
       game = Minesweeper::Game.new(5, 5, 2)
@@ -130,11 +132,11 @@ describe Minesweeper::Game do
         [0, 0, 0, 0, 0]
       ]
       expected_board_state = [
-        [        :bomb, :unknown_cell, :unknown_cell, :unknown_cell, :unknown_cell],
-        [:unknown_cell, :unknown_cell, :unknown_cell, :unknown_cell, :unknown_cell],
-        [:unknown_cell, :unknown_cell,         :bomb, :unknown_cell, :unknown_cell],
-        [:unknown_cell, :unknown_cell, :unknown_cell, :unknown_cell, :unknown_cell],
-        [:unknown_cell, :unknown_cell, :unknown_cell, :unknown_cell, :unknown_cell]
+        %i[bomb unknown_cell unknown_cell unknown_cell unknown_cell],
+        %i[unknown_cell unknown_cell unknown_cell unknown_cell unknown_cell],
+        %i[unknown_cell unknown_cell bomb unknown_cell unknown_cell],
+        %i[unknown_cell unknown_cell unknown_cell unknown_cell unknown_cell],
+        %i[unknown_cell unknown_cell unknown_cell unknown_cell unknown_cell]
       ]
       board = Minesweeper::Board.new(5, 5, 2, bombs)
       game = Minesweeper::Game.new(5, 5, 2)

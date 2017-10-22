@@ -2,8 +2,7 @@ require 'spec_helper'
 require 'minesweeper/board'
 
 describe Minesweeper::Board do
-
-  [:board_state, :expand, :toggle_flag, :exploded?].each do |method|
+  %i[board_state expand toggle_flag exploded?].each do |method|
     it "responds to #{method}" do
       expect(Minesweeper::Board.new(1, 1, 0)).to respond_to method
     end
@@ -43,21 +42,21 @@ describe Minesweeper::Board do
       board = Minesweeper::Board.new(3, 3, 0)
       expect(board.board_state).to eq(
         [
-          [:unknown_cell, :unknown_cell, :unknown_cell],
-          [:unknown_cell, :unknown_cell, :unknown_cell],
-          [:unknown_cell, :unknown_cell, :unknown_cell]
+          %i[unknown_cell unknown_cell unknown_cell],
+          %i[unknown_cell unknown_cell unknown_cell],
+          %i[unknown_cell unknown_cell unknown_cell]
         ]
       )
     end
 
-    it "board with no bomb after expansion" do
+    it 'board with no bomb after expansion' do
       board = Minesweeper::Board.new(3, 3, 0)
       board.expand(0, 0)
       expect(board.board_state).to eq(
         [
-          [:clear_cell, :clear_cell, :clear_cell],
-          [:clear_cell, :clear_cell, :clear_cell],
-          [:clear_cell, :clear_cell, :clear_cell]
+          %i[clear_cell clear_cell clear_cell],
+          %i[clear_cell clear_cell clear_cell],
+          %i[clear_cell clear_cell clear_cell]
         ]
       )
     end
@@ -100,8 +99,8 @@ describe Minesweeper::Board do
           [:clear_cell,           2, :unknown_cell, :unknown_cell, :unknown_cell],
           [:clear_cell,           3, :unknown_cell, :unknown_cell, :unknown_cell],
           [:clear_cell,           2, :unknown_cell, :unknown_cell, :unknown_cell],
-          [:clear_cell,           1,             2,             3, :unknown_cell],
-          [:clear_cell, :clear_cell,   :clear_cell,             1, :unknown_cell]
+          [:clear_cell,           1, 2,             3, :unknown_cell],
+          [:clear_cell, :clear_cell, :clear_cell, 1, :unknown_cell]
         ]
       )
       board.expand(0, 4)
@@ -109,11 +108,11 @@ describe Minesweeper::Board do
       Minesweeper::SimplePrinter.new.print(board.board_state)
       expect(board.board_state).to eq(
         [
-          [:clear_cell,           2, :unknown_cell,             2,   :clear_cell],
-          [:clear_cell,           3, :unknown_cell,             4,             1],
+          [:clear_cell,           2, :unknown_cell,             2, :clear_cell],
+          [:clear_cell,           3, :unknown_cell,             4, 1],
           [:clear_cell,           2, :unknown_cell, :unknown_cell, :unknown_cell],
-          [:clear_cell,           1,             2,             3, :unknown_cell],
-          [:clear_cell, :clear_cell,   :clear_cell,             1, :unknown_cell]
+          [:clear_cell,           1, 2,             3, :unknown_cell],
+          [:clear_cell, :clear_cell, :clear_cell, 1, :unknown_cell]
         ]
       )
     end
@@ -126,11 +125,11 @@ describe Minesweeper::Board do
       Minesweeper::SimplePrinter.new.print(board.board_state)
       expect(board.board_state).to eq(
         [
-          [:clear_cell, :clear_cell, :clear_cell, :clear_cell, :clear_cell],
-          [:clear_cell, :clear_cell, :clear_cell, :clear_cell, :clear_cell],
-          [:clear_cell, :clear_cell,       :flag, :clear_cell, :clear_cell],
-          [:clear_cell, :clear_cell, :clear_cell, :clear_cell, :clear_cell],
-          [:clear_cell, :clear_cell, :clear_cell, :clear_cell, :clear_cell]
+          %i[clear_cell clear_cell clear_cell clear_cell clear_cell],
+          %i[clear_cell clear_cell clear_cell clear_cell clear_cell],
+          %i[clear_cell clear_cell flag clear_cell clear_cell],
+          %i[clear_cell clear_cell clear_cell clear_cell clear_cell],
+          %i[clear_cell clear_cell clear_cell clear_cell clear_cell]
         ]
       )
     end
@@ -149,7 +148,7 @@ describe Minesweeper::Board do
       Minesweeper::SimplePrinter.new.print(board.board_state)
       expect(board.board_state).to eq(
         [
-          [:clear_cell, 2,         :flag, :unknown_cell, :unknown_cell],
+          [:clear_cell, 2, :flag, :unknown_cell, :unknown_cell],
           [:clear_cell, 2, :unknown_cell, :unknown_cell, :unknown_cell],
           [:clear_cell, 2, :unknown_cell, :unknown_cell, :unknown_cell],
           [:clear_cell, 1, :unknown_cell, :unknown_cell, :unknown_cell],
@@ -176,7 +175,7 @@ describe Minesweeper::Board do
           [:clear_cell,           3, :unknown_cell, :unknown_cell, :unknown_cell],
           [:clear_cell,           2, :unknown_cell, :unknown_cell, :unknown_cell],
           [:clear_cell,           1, :unknown_cell, :unknown_cell, :unknown_cell],
-          [:clear_cell,       :flag, :unknown_cell, :unknown_cell, :unknown_cell],
+          %i[clear_cell flag unknown_cell unknown_cell unknown_cell]
         ]
       )
     end

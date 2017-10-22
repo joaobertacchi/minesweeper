@@ -1,7 +1,6 @@
 require 'contracts'
 
 module Minesweeper
-
   # Store the game board state
   class Board
     include Contracts::Core
@@ -15,14 +14,14 @@ module Minesweeper
     # @param num_mines is a non-negative integer. Must be less than or equal to width * height
     # @param bombs_position is an matrix of height X width dimensions. 1 indicates bomb and 0, no-bomb.
     Contract C::Pos, C::Pos, C::Nat, C::Maybe[C::ArrayOf[C::ArrayOf[C::Nat]]] => C::Any
-    def initialize(width, height, num_mines, bombs_position=nil)
-      raise "num_mines should be <= width*height" if num_mines > width*height
+    def initialize(width, height, num_mines, bombs_position = nil)
+      raise 'num_mines should be <= width*height' if num_mines > width * height
       @width = width
       @height = height
       @num_mines = num_mines
       @exploded = false
 
-      @current_num_non_mines = @width*@height - @num_mines
+      @current_num_non_mines = @width * @height - @num_mines
 
       init_board(bombs_position)
       set_neighbor_bombs
@@ -48,18 +47,18 @@ module Minesweeper
     def closed_cells_without_bomb
       @current_num_non_mines
     end
-    
+
     # Param config is ignored unless the game is over. In this case, closed cells
     # with bombs (with or without flag) return :bomb state.
     # @param config optional hash to enable xray feature. Works only if the game is finished
     # @return the current board representation as a height X width matrix.
     Contract C::Maybe[C::KeywordArgs[xray: C::Bool]] => C::ArrayOf[C::ArrayOf[Or[Symbol, C::Pos]]]
-    def board_state(config={})
+    def board_state(config = {})
       xray = false
       xray = config[:xray] if config.key?(:xray)
 
       @board_cells.map do |line|
-        line.map{|cell| cell.state(xray)}
+        line.map { |cell| cell.state(xray) }
       end
     end
 
@@ -69,16 +68,16 @@ module Minesweeper
     def expand(row, col)
       valid = play_and_track_non_mines_and_explosion(row, col)
 
-      return false if not valid
+      return false unless valid
       return valid if @exploded
-      
+
       expansion_candidates = []
       cell_coordinate = [row, col]
-      while not cell_coordinate.nil?
+      until cell_coordinate.nil?
         i = cell_coordinate[0]
         j = cell_coordinate[1]
         cell = @board_cells[i][j]
-        if cell.state == :clear_cell then
+        if cell.state == :clear_cell
           closed_neighbor_coordinates_without_bomb(i, j).each do |coordinate|
             x = coordinate[0]
             y = coordinate[1]
@@ -102,12 +101,13 @@ module Minesweeper
     end
 
     private
+
     def play_and_track_non_mines_and_explosion(row, col)
       is_valid = @board_cells[row][col].play
 
-      if is_valid then
-        @current_num_non_mines -= 1 if (not @board_cells[row][col].bomb?)
-        @exploded = @board_cells[row][col].bomb? if not @exploded
+      if is_valid
+        @current_num_non_mines -= 1 unless @board_cells[row][col].bomb?
+        @exploded ||= @board_cells[row][col].bomb?
       end
 
       is_valid
@@ -128,9 +128,7 @@ module Minesweeper
     end
 
     def init_board(bombs_position)
-      if bombs_position.nil? then
-        bombs_position = random_bombs_position
-      end
+      bombs_position = random_bombs_position if bombs_position.nil?
 
       @board_cells = bombs_position.map do |line|
         line.map do |bomb|
@@ -141,26 +139,25 @@ module Minesweeper
     end
 
     def random_bombs_position
-      initial_num_non_mines = @width*@height - @num_mines
-      shuffled_bombs = (Array.new(@num_mines){1} + Array.new(initial_num_non_mines){0}).shuffle
+      initial_num_non_mines = @width * @height - @num_mines
+      shuffled_bombs = (Array.new(@num_mines) { 1 } + Array.new(initial_num_non_mines) { 0 }).shuffle
       shuffled_bombs.each_slice(@width).to_a
     end
 
     def set_neighbor_bombs
-      (0..(@height-1)).each do |i|
-        (0..(@width-1)).each do |j|
+      (0..(@height - 1)).each do |i|
+        (0..(@width - 1)).each do |j|
           increment_neighbors(i, j) if @board_cells[i][j].bomb?
         end
       end
     end
 
     def increment_neighbors(x, y)
-      ((x-1)..(x+1)).each do |i|
-        if i >=0 and i < @height then
-          ((y-1)..(y+1)).each do |j|
-            if j >= 0 and j < @width then
-              @board_cells[i][j].neighbor_bombs += 1 if i != x or j != y
-            end
+      ((x - 1)..(x + 1)).each do |i|
+        next unless (i >= 0) && (i < @height)
+        ((y - 1)..(y + 1)).each do |j|
+          if (j >= 0) && (j < @width)
+            @board_cells[i][j].neighbor_bombs += 1 if (i != x) || (j != y)
           end
         end
       end
@@ -168,12 +165,11 @@ module Minesweeper
 
     def neighbor_coordinates(row, col)
       neighbors = []
-      ((row-1)..(row+1)).each do |i|
-        if i >= 0 and i < @height then
-          ((col-1)..(col+1)).each do |j|
-            if j >= 0 and j < @width then
-              neighbors.push([i, j]) if ((i != row) or (j != col))
-            end
+      ((row - 1)..(row + 1)).each do |i|
+        next unless (i >= 0) && (i < @height)
+        ((col - 1)..(col + 1)).each do |j|
+          if (j >= 0) && (j < @width)
+            neighbors.push([i, j]) if (i != row) || (j != col)
           end
         end
       end
@@ -184,7 +180,7 @@ module Minesweeper
       neighbor_coordinates(row, col).select do |coordinate|
         i = coordinate[0]
         j = coordinate[1]
-        not @board_cells[i][j].open? and not @board_cells[i][j].bomb? and not @board_cells[i][j].flag?
+        !@board_cells[i][j].open? && !@board_cells[i][j].bomb? && !@board_cells[i][j].flag?
       end
     end
   end

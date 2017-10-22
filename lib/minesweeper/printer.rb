@@ -2,8 +2,7 @@ require 'colorize'
 
 module Minesweeper
   class Printer
-
-    def initialize(raw=false)
+    def initialize(raw = false)
       @board_format = {
         unknown_cell: '.',
         clear_cell: ' ',
@@ -14,26 +13,26 @@ module Minesweeper
     end
 
     def print(board_state)
-      print_header(2, board_state) if not @raw
+      print_header(2, board_state) unless @raw
 
       board_state.each_with_index do |line, index|
         line_str = line_body(line, index)
         puts (@raw ? '' : transform(line_header(index))) + line_str
         line_sep = line_separator(board_state)
-        puts line_sep if not line_sep.nil?
+        puts line_sep unless line_sep.nil?
       end
     end
 
     protected
+
     def transform(text)
       text
     end
 
-    def line_separator(board_state=nil)
-    end
+    def line_separator(board_state = nil); end
 
-    def line_body(line, index)
-      line.map{|cell| (cell.is_a?(Numeric) ? cell.to_s : @board_format[cell]) }.join(' ')
+    def line_body(line, _index)
+      line.map { |cell| (cell.is_a?(Numeric) ? cell.to_s : @board_format[cell]) }.join(' ')
     end
 
     def print_header(space, board_state)
@@ -43,8 +42,8 @@ module Minesweeper
     end
 
     def header(space, board_state)
-      [ ' '*space + (0..(board_state[0].size-1)).to_a.join(' '),
-        ' '*space + '_' * (board_state[0].size * 2 - 1)]
+      [' ' * space + (0..(board_state[0].size - 1)).to_a.join(' '),
+       ' ' * space + '_' * (board_state[0].size * 2 - 1)]
     end
 
     def line_header(line_number)
@@ -56,8 +55,7 @@ module Minesweeper
   end
 
   class PrettyPrinter < Printer
-
-    def initialize(raw=false)
+    def initialize(raw = false)
       @board_format = {
         unknown_cell: '.',
         clear_cell: ' ',
@@ -68,25 +66,26 @@ module Minesweeper
     end
 
     protected
+
     def transform(text)
       text.colorize(:light_black)
     end
 
     def line_separator(board_state)
-      transform('   |' + '---|'*board_state[0].size)
+      transform('   |' + '---|' * board_state[0].size)
     end
 
-    def header(space, board_state)
-      [ '    ' + (("%3d|"*board_state[0].size) % (0..(board_state[0].size-1)).to_a),
-        '    ' + '---|'*board_state[0].size]
+    def header(_space, board_state)
+      ['    ' + (('%3d|' * board_state[0].size) % (0..(board_state[0].size - 1)).to_a),
+       '    ' + '---|' * board_state[0].size]
     end
 
     def line_header(line_number)
-      "%3d|" % line_number
+      format('%3d|', line_number)
     end
 
-    def line_body(line, index)
-      (((" %s " + transform("|"))*line.size) % line.map{|cell| (cell.is_a?(Numeric) ? cell.to_s.colorize(:light_white) : @board_format[cell]) })
+    def line_body(line, _index)
+      (((' %s ' + transform('|')) * line.size) % line.map { |cell| (cell.is_a?(Numeric) ? cell.to_s.colorize(:light_white) : @board_format[cell]) })
     end
   end
 end
