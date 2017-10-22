@@ -53,18 +53,19 @@ module Minesweeper
     # - :clear_cell - open cell with no neighbor bombs
     # - :bomb - open cell with a bomb
     # - :flag - closed cell with a flagged
-    # - n - n is a integer from 1 to 8. Indicates an open cell with n neighbor bombs
+    # - <number> - is a integer from 1 to 8. Indicates an open cell with <number> neighbor bombs
     #
     # Param config is ignored unless the game is over. In this case, closed cells
     # with bombs (with or without flag) return :bomb state.
     # @param config optional hash to enable xray feature. Works only if the game is finished
-    Contract C::Maybe[C::KeywordArgs[:xray => C::Bool]] => C::ArrayOf[C::ArrayOf[Or[Symbol, C::Pos]]]
+    # @return the current board representation as a height X width matrix.
+    Contract C::Maybe[C::KeywordArgs[xray: C::Bool]] => C::ArrayOf[C::ArrayOf[Or[Symbol, C::Pos]]]
     def board_state(config={xray: false})
       config = {xray: false} if @playing
       @board.board_state(config)
     end
 
-    # Returns true if the game is over and the player won. Return false otherwise.
+    # @return true if the game is over and the player won. Return false otherwise.
     def victory?
       ((not @playing) and (not @board.exploded?))
     end

@@ -1,7 +1,8 @@
 require 'contracts'
 
 module Minesweeper
-  
+
+  # Store the game board state
   class Board
     include Contracts::Core
     include Contracts::Builtin
@@ -9,9 +10,10 @@ module Minesweeper
 
     attr_reader :width, :height, :num_mines
 
-    # width, height, and num_mines are integers. num_mines must be <= width*height
-    # bombs_position is an matrix of height X width dimension. Its elements are
-    # 1 to indicate a bomb and 0 to indicate no-bomb.
+    # @param width is a positive integer
+    # @param height is a positive integer
+    # @param num_mines is a non-negative integer. Must be less than or equal to width * height
+    # @param bombs_position is an matrix of height X width dimensions. 1 indicates bomb and 0, no-bomb.
     Contract C::Pos, C::Pos, C::Nat, C::Maybe[C::ArrayOf[C::ArrayOf[C::Nat]]] => C::Any
     def initialize(width, height, num_mines, bombs_position=nil)
       raise "num_mines should be <= width*height" if num_mines > width*height
@@ -33,16 +35,25 @@ module Minesweeper
       raise "width=#{@width} and actual width in bombs_position (#{actual_width}) does not match" if actual_width != @width
     end
 
+    # Indicates if any bomb in the board has exploded.
+    # @return true if any bomb in the board has exploded. False otherwise.
+    Contract C::None => C::Bool
     def exploded?
       @exploded
     end
 
+    # Used for knowing if the game is finished.
+    # @return the amount of closed cells that has no bomb.
     Contract C::None => C::Nat
     def closed_cells_without_bomb
       @current_num_non_mines
     end
     
-    Contract C::Maybe[C::KeywordArgs[:xray => C::Bool]] => C::ArrayOf[C::ArrayOf[Or[Symbol, C::Pos]]]
+    # Param config is ignored unless the game is over. In this case, closed cells
+    # with bombs (with or without flag) return :bomb state.
+    # @param config optional hash to enable xray feature. Works only if the game is finished
+    # @return the current board representation as a height X width matrix.
+    Contract C::Maybe[C::KeywordArgs[xray: C::Bool]] => C::ArrayOf[C::ArrayOf[Or[Symbol, C::Pos]]]
     def board_state(config={})
       xray = false
       xray = config[:xray] if config.key?(:xray)
@@ -52,6 +63,8 @@ module Minesweeper
       end
     end
 
+    # Tries to open the cell. If it is clear, its neighbors are also opened.
+    # @return true if the cell could be open.
     Contract C::Nat, C::Nat => C::Bool
     def expand(row, col)
       valid = play_and_track_non_mines_and_explosion(row, col)
@@ -81,6 +94,8 @@ module Minesweeper
       valid
     end
 
+    # Toggles the flag status. An open cell cannot be flagged.
+    # @return true if flag status could be toggled. False otherwise.
     Contract C::Nat, C::Nat => C::Bool
     def toggle_flag(row, col)
       @board_cells[row][col].toggle_flag

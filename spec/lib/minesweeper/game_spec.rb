@@ -1,66 +1,52 @@
-require "spec_helper"
-require "minesweeper/game"
+require 'spec_helper'
+require 'minesweeper/game'
 
 describe Minesweeper::Game do
-  
   before :each do
     width, height, num_mines = 10, 20, 50
     @game = Minesweeper::Game.new(width, height, num_mines)
-    #Minesweeper::SimplePrinter.new.print(@game.board_state(xray: true))
   end
-  
   [:still_playing?, :play, :flag, :board_state, :victory?].each do |method|
     it "responds to #{method}" do
       expect(@game).to respond_to method
     end
   end
-  
   describe '#initialize' do
-    
     it 'with bigger than allowed num_mines value' do
-      expect{ Minesweeper::Game.new(5, 5, 26) }.to raise_error(RuntimeError)
+      expect { Minesweeper::Game.new(5, 5, 26) }.to raise_error(RuntimeError)
     end
-    
-    it "with non integer width" do
-      expect{ Minesweeper::Game.new(:a,5,25) }.to raise_error(ArgumentError)
+    it 'with non integer width' do
+      expect { Minesweeper::Game.new(:a, 5, 25) }.to raise_error(ArgumentError)
     end
-    
-    it "with non integer height" do
-      expect{ Minesweeper::Game.new(5, :a,25) }.to raise_error(ArgumentError)
+    it 'with non integer height' do
+      expect { Minesweeper::Game.new(5, :a, 25) }.to raise_error(ArgumentError)
     end
-    
-    it "with non integer num_mines" do
-      expect{ Minesweeper::Game.new(5, 5, :a) }.to raise_error(ArgumentError)
+    it 'with non integer num_mines' do
+      expect { Minesweeper::Game.new(5, 5, :a) }.to raise_error(ArgumentError)
     end
   end
-  
   describe '#still_playing?' do
     it 'tests if game is playing' do
       expect(@game.still_playing?).to eq(true)
     end
   end
-  
   describe '#play' do
     it 'triggers a game play' do
       expect(@game.play(1, 1)).to eq(true)
       expect(@game.play(1, 1)).to eq(false)
     end
   end
-  
   describe '#flag' do
     it 'puts a flag in the current game' do
       expect(@game.flag(1, 1)).to eq(true)
       expect(@game.play(1, 1)).to eq(false)
     end
   end
-  
   describe '#board_state' do
     it 'get the board state' do
       expect(@game).to respond_to(:board_state)
     end
-    
     it 'get the complete board state' do
-      #expect(@game.board_state(xray: true)).not_to eq(nil)
       expect(@game).to respond_to(:board_state)
     end
   end
@@ -116,11 +102,11 @@ describe Minesweeper::Game do
   describe '#board_state' do
     it 'xray does not work for an unfinished game' do
       bombs = [
-        [1,0,0,0,0],
-        [0,0,0,0,0],
-        [0,0,1,0,0],
-        [0,0,0,0,0],
-        [0,0,0,0,0]
+        [1, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 1, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0]
       ]
       expected_board_state = [
         [:unknown_cell, :unknown_cell, :unknown_cell, :unknown_cell, :unknown_cell],
@@ -132,16 +118,16 @@ describe Minesweeper::Game do
       board = Minesweeper::Board.new(5, 5, 2, bombs)
       game = Minesweeper::Game.new(5, 5, 2)
       game.board = board
-      expect(game.board_state({xray: true})).to eq(expected_board_state)
+      expect(game.board_state(xray: true)).to eq(expected_board_state)
     end
 
     it 'xray works for finished game' do
       bombs = [
-        [1,0,0,0,0],
-        [0,0,0,0,0],
-        [0,0,1,0,0],
-        [0,0,0,0,0],
-        [0,0,0,0,0]
+        [1, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 1, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0]
       ]
       expected_board_state = [
         [        :bomb, :unknown_cell, :unknown_cell, :unknown_cell, :unknown_cell],
@@ -154,8 +140,7 @@ describe Minesweeper::Game do
       game = Minesweeper::Game.new(5, 5, 2)
       game.board = board
       game.play(0, 0) # Force game to finish with a explosion
-      expect(game.board_state({xray: true})).to eq(expected_board_state)
+      expect(game.board_state(xray: true)).to eq(expected_board_state)
     end
   end
-  
 end

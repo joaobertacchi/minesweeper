@@ -22,19 +22,19 @@ module Minesweeper
       @neighbor_bombs = neighbor_bombs
     end
     
-    # Cell has a bomb
+    # @return true if the cell has a bomb
     Contract C::None => C::Bool
     def bomb?
       @bomb
     end
     
-    # Cell is open
+    # @return true if the cell is open
     Contract C::None => C::Bool
     def open?
       @open
     end
     
-    # Cell is flagged
+    # @return true if the cell is flagged
     Contract C::None => C::Bool
     def flag?
       @flag
@@ -63,6 +63,9 @@ module Minesweeper
       end
     end
 
+    # @param xray if it is true, even a closed cell reveals if it has a bomb 
+    # @return the state of the cell. Valid states: :bomb, :flag, :unknown_cell, :clear_cell, <number>
+    Contract C::Bool => C::Or[Symbol, C::Pos]
     def state(xray=false)
       return :bomb if self.bomb? and xray
       return :flag if self.flag?

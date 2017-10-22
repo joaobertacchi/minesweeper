@@ -10,7 +10,6 @@ describe Minesweeper::Board do
   end
 
   describe '#initialize' do
-
     it 'with static bombs' do
       bombs = [
         [1, 0, 0],
@@ -41,7 +40,7 @@ describe Minesweeper::Board do
 
   describe '#expand' do
     it 'board with no bomb before expansion' do
-      board = Minesweeper::Board.new(3,3,0)
+      board = Minesweeper::Board.new(3, 3, 0)
       expect(board.board_state).to eq(
         [
           [:unknown_cell, :unknown_cell, :unknown_cell],
@@ -65,11 +64,11 @@ describe Minesweeper::Board do
 
     it 'board with bombs after expansion (CASE 1)' do
       bombs = [
-        [0,0,1,0,0],
-        [0,0,1,0,0],
-        [0,0,0,1,0],
-        [0,0,1,0,0],
-        [0,0,0,1,0]
+        [0, 0, 1, 0, 0],
+        [0, 0, 1, 0, 0],
+        [0, 0, 0, 1, 0],
+        [0, 0, 1, 0, 0],
+        [0, 0, 0, 1, 0]
       ]
       board = Minesweeper::Board.new(5, 5, 5, bombs)
       board.expand(0, 0)
@@ -87,11 +86,11 @@ describe Minesweeper::Board do
 
     it 'board with bombs after expansion (CASE 2)' do
       bombs = [
-        [0,0,1,0,0],
-        [0,0,1,0,0],
-        [0,0,1,1,0],
-        [0,0,0,0,1],
-        [0,0,0,0,0]
+        [0, 0, 1, 0, 0],
+        [0, 0, 1, 0, 0],
+        [0, 0, 1, 1, 0],
+        [0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0]
       ]
       board = Minesweeper::Board.new(5, 5, 5, bombs)
       board.expand(0, 0)
@@ -138,11 +137,11 @@ describe Minesweeper::Board do
 
     it 'board with bombs and a flag in a correct place (CASE 4)' do
       bombs = [
-        [0,0,1,0,0],
-        [0,0,1,0,0],
-        [0,0,0,1,0],
-        [0,0,1,0,0],
-        [0,0,0,1,0]
+        [0, 0, 1, 0, 0],
+        [0, 0, 1, 0, 0],
+        [0, 0, 0, 1, 0],
+        [0, 0, 1, 0, 0],
+        [0, 0, 0, 1, 0]
       ]
       board = Minesweeper::Board.new(5, 5, 5, bombs)
       board.toggle_flag(0, 2)
@@ -161,11 +160,11 @@ describe Minesweeper::Board do
 
     it 'board with bombs and a flag in a wrong place (CASE 5)' do
       bombs = [
-        [0,0,1,0,0],
-        [0,0,1,0,0],
-        [0,0,1,1,0],
-        [0,0,0,0,1],
-        [0,0,0,0,0]
+        [0, 0, 1, 0, 0],
+        [0, 0, 1, 0, 0],
+        [0, 0, 1, 1, 0],
+        [0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0]
       ]
       board = Minesweeper::Board.new(5, 5, 5, bombs)
       board.toggle_flag(4, 1)
