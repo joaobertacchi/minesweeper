@@ -63,9 +63,6 @@ describe Minesweeper::Game do
     end
   end
   describe '#board_state' do
-    it 'get the board state' do
-      expect(@game).to respond_to(:board_state)
-    end
     it 'get the complete board state' do
       expect(@game).to respond_to(:board_state)
     end
