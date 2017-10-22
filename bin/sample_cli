@@ -2,21 +2,32 @@
 
 require 'minesweeper'
 
-puts 'Type width, height, num_mines separated by spaces:'
-width, height, num_mines = STDIN.gets.chomp.split(' ').map(&:to_i)
-game = Minesweeper::Game.new(width, height, num_mines)
-printer = (ARGV[0] == '--pretty' ? Minesweeper::PrettyPrinter.new : Minesweeper::SimplePrinter.new)
+valid_input = false
+while !valid_input do
+  begin
+    puts 'Type width, height, num_mines separated by spaces:'
+    width, height, num_mines = STDIN.gets.chomp.split(' ').map(&:to_i)
+    game = Minesweeper::Game.new(width, height, num_mines)
+    printer = (ARGV[0] == '--pretty' ? Minesweeper::PrettyPrinter.new : Minesweeper::SimplePrinter.new)
+  rescue => exception
+    puts 'Wrong input. Try again!'
+  end
+end
 
 while game.still_playing?
   printer.print(game.board_state)
   puts
   puts 'What is your next move:'
-  type, row, col = STDIN.gets.chomp.split(' ')
-  if type == 'F'
-    valid_flag = game.flag(row.to_i, col.to_i)
-  elsif type == 'P'
-    valid_move = game.play(row.to_i, col.to_i)
-  else
+  begin
+    type, row, col = STDIN.gets.chomp.split(' ')
+    if type == 'F'
+      valid_flag = game.flag(row.to_i, col.to_i)
+    elsif type == 'P'
+      valid_move = game.play(row.to_i, col.to_i)
+    else
+      valid_move = false
+    end
+  rescue => exception
     valid_move = false
   end
 

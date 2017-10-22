@@ -37,11 +37,29 @@ describe Minesweeper::Game do
       expect(@game.play(1, 1)).to eq(true)
       expect(@game.play(1, 1)).to eq(false)
     end
+    it 'throws exception for too big row' do
+      expect { @game.play(20, 0) }.to raise_error(RuntimeError)
+    end
+    it 'throws exception for too big col' do
+      expect { @game.play(19, 10) }.to raise_error(RuntimeError)
+    end
+    it 'throws exception for wrong params' do
+      expect { @game.play(0) }.to raise_error(ArgumentError)
+    end
   end
   describe '#flag' do
     it 'puts a flag in the current game' do
       expect(@game.flag(1, 1)).to eq(true)
       expect(@game.play(1, 1)).to eq(false)
+    end
+    it 'throws exception for too big row' do
+      expect { @game.flag(20, 0) }.to raise_error(RuntimeError)
+    end
+    it 'throws exception for too big col' do
+      expect { @game.flag(19, 10) }.to raise_error(RuntimeError)
+    end
+    it 'throws exception for wrong params' do
+      expect { @game.flag(0) }.to raise_error(ArgumentError)
     end
   end
   describe '#board_state' do

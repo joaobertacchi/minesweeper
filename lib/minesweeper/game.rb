@@ -28,6 +28,8 @@ module Minesweeper
     # @return a boolean to indicate if the move was valid
     Contract C::Nat, C::Nat => C::Bool
     def play(row, col)
+      raise "row must be less than #{@board.height}" if row >= @board.height
+      raise "col must be less than #{@board.width}" if col >= @board.width
       return false unless @playing
       is_valid = @board.expand(row, col)
       @playing = !(@board.exploded? || (@board.closed_cells_without_bomb == 0))
@@ -42,6 +44,8 @@ module Minesweeper
     # @return a boolean to inform if the flag placement was valid
     Contract C::Nat, C::Nat => C::Bool
     def flag(row, col)
+      raise "row must be less than #{@board.height}" if row >= @board.height
+      raise "col must be less than #{@board.width}" if col >= @board.width
       return false unless @playing
       @board.toggle_flag(row, col)
     end
