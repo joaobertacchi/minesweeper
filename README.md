@@ -10,35 +10,44 @@ Use the following example from bin/sample_cli as a guideline.
 
 require 'minesweeper'
 
-puts "Type width, height, num_mines separated by spaces:"
-width, height, num_mines = STDIN.gets.chomp.split(' ').map{|e| e.to_i}
-game = Minesweeper::Game.new(width, height, num_mines)
-printer = (ARGV[0] == '--pretty' ? Minesweeper::PrettyPrinter.new : Minesweeper::SimplePrinter.new)
+valid_input = false
+while !valid_input do
+  begin
+    puts 'Type width, height, num_mines separated by spaces:'
+    width, height, num_mines = STDIN.gets.chomp.split(' ').map(&:to_i)
+    game = Minesweeper::Game.new(width, height, num_mines)
+    printer = (ARGV[0] == '--pretty' ? Minesweeper::PrettyPrinter.new : Minesweeper::SimplePrinter.new)
+  rescue => exception
+    puts 'Wrong input. Try again!'
+  end
+end
 
 while game.still_playing?
   printer.print(game.board_state)
   puts
-  puts "What is your next move:"
-  type, row, col = STDIN.gets.chomp.split(' ')
-  if type == 'F' then
-    valid_flag = game.flag(row.to_i, col.to_i)
-  elsif type == 'P' then
-    valid_move = game.play(row.to_i, col.to_i)
-  else
+  puts 'What is your next move:'
+  begin
+    type, row, col = STDIN.gets.chomp.split(' ')
+    if type == 'F'
+      valid_flag = game.flag(row.to_i, col.to_i)
+    elsif type == 'P'
+      valid_move = game.play(row.to_i, col.to_i)
+    else
+      valid_move = false
+    end
+  rescue => exception
     valid_move = false
   end
-  
-  if not valid_move
-    puts 'Invalid move!!! Try again!'
-  end
+
+  puts 'Invalid move!!! Try again!' unless valid_move
 end
 
-puts "Game over!"
+puts 'Game over!'
 if game.victory?
-  puts "You won!"
+  puts 'You won!'
   printer.print(game.board_state(xray: true))
 else
-  puts "You lose! Mine were at:"
+  puts 'You lose! Mine were at:'
   printer.print(game.board_state(xray: true))
 end
 ```
