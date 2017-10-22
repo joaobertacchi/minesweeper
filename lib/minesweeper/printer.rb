@@ -2,11 +2,15 @@ require 'colorize'
 require 'contracts'
 
 module Minesweeper
+
+  # The real print behavior is implemented by its subclasses
   class Printer
     include Contracts::Core
     include Contracts::Builtin
     C = Contracts
 
+    # @param raw when true, printer does not print headers
+    Contract C::Bool => C::Any
     def initialize(raw = false)
       @board_format = {
         unknown_cell: '.',
@@ -17,7 +21,8 @@ module Minesweeper
       @raw = raw
     end
 
-    Contract C::ArrayOf[C::ArrayOf[Or[Symbol, C::Pos]]] => C::Any
+    # @param board_state refer to Minesweeper::Game#board_state for checking its format
+    Contract C::ArrayOf[C::ArrayOf[Or[Symbol, C::Pos]]] => nil
     def print(board_state)
       print_header(2, board_state) unless @raw
 
@@ -27,6 +32,7 @@ module Minesweeper
         line_sep = line_separator(board_state)
         puts line_sep unless line_sep.nil?
       end
+      nil
     end
 
     protected
@@ -132,6 +138,8 @@ module Minesweeper
     include Contracts::Builtin
     C = Contracts
 
+    # @param raw when true, printer does not print headers
+    Contract C::Bool => C::Any
     def initialize(raw = false)
       @board_format = {
         unknown_cell: '.',
