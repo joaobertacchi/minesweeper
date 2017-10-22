@@ -6,6 +6,7 @@ module Minesweeper
   # This class represents a minesweeper game
   class Game
     include Contracts::Core
+    include Contracts::Builtin
     C = Contracts
     
     Contract C::Pos, C::Pos, C::Nat => C::Any
@@ -14,6 +15,8 @@ module Minesweeper
       @playing = true
     end
     
+    # Returns true if the game is not finished. Return false otherwise.
+    # The game finishes when a bomb is clicked or all non-bomb cells are uncovered.
     def still_playing?
       @playing
     end
@@ -44,7 +47,6 @@ module Minesweeper
       @board.toggle_flag(row, col)
     end
     
-    #
     # Returns the current board representation as a height X width matrix.
     # Each matrix element may have the following states:
     # - :unknown_cell - closed cell
@@ -53,18 +55,16 @@ module Minesweeper
     # - :flag - closed cell with a flagged
     # - n - n is a integer from 1 to 8. Indicates an open cell with n neighbor bombs
     #
-    # config param is an optional hash that follows {xray: bool} format. This param is
-    # ignored unless the game is over. In that case, closed cells with bombs will be
-    # uncovered and returned with :bomb state.
-
+    # Param config is ignored unless the game is over. In this case, closed cells
+    # with bombs (with or without flag) return :bomb state.
+    # @param config optional hash to enable xray feature. Works only if the game is finished
+    Contract C::Maybe[C::KeywordArgs[:xray => C::Bool]] => C::ArrayOf[C::ArrayOf[Or[Symbol, C::Pos]]]
     def board_state(config={xray: false})
       config = {xray: false} if @playing
       @board.board_state(config)
     end
 
-    #
     # Returns true if the game is over and the player won. Return false otherwise.
-
     def victory?
       ((not @playing) and (not @board.exploded?))
     end
