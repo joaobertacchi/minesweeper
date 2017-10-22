@@ -11,15 +11,15 @@ Use the following example from bin/sample_cli as a guideline.
 require 'minesweeper'
 
 puts "Type width, height, num_mines separated by spaces:"
-width, height, num_mines = gets.split(' ').map{|e| e.to_i}
+width, height, num_mines = STDIN.gets.chomp.split(' ').map{|e| e.to_i}
 game = Minesweeper::Game.new(width, height, num_mines)
-printer = Minesweeper::SimplePrinter.new
+printer = (ARGV[0] == '--pretty' ? Minesweeper::PrettyPrinter.new : Minesweeper::SimplePrinter.new)
 
 while game.still_playing?
   printer.print(game.board_state)
   puts
   puts "What is your next move:"
-  type, row, col = gets.split(' ')
+  type, row, col = STDIN.gets.chomp.split(' ')
   if type == 'F' then
     valid_flag = game.flag(row.to_i, col.to_i)
   elsif type == 'P' then
@@ -49,6 +49,12 @@ To test sample_cli without installing minesweeper gem, run:
 git clone https://bitbucket.org/joaobertacchi/minesweeper.git
 cd minesweeper
 ruby -Ilib ./bin/sample_cli
+```
+
+If you prefer to use a prettier printer:
+
+```bash
+ruby -Ilib ./bin/sample_cli --pretty
 ```
 
 ## Installation
