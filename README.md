@@ -58,6 +58,7 @@ To test sample_cli without installing minesweeper gem, run:
 ```bash
 git clone https://bitbucket.org/joaobertacchi/minesweeper.git
 cd minesweeper
+bundle
 ruby -Ilib ./bin/sample_cli
 ```
 
