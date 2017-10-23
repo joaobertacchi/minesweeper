@@ -736,8 +736,13 @@ printer.print(game.board_state)
 ```
 
 Please refer to Minesweeper API for further instructions. To access the API
-documentation, first run `bundle exec yardoc` from minesweeper repo and then
-open ```doc/index.html``` from your prefered web browser.
+documentation, first run from minesweeper repo:
+
+```ruby
+bundle exec yardoc
+```
+
+And then open ```doc/index.html``` from your prefered web browser.
 
 
 ## Development
