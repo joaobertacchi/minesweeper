@@ -68,6 +68,111 @@ If you prefer to use a prettier printer:
 ruby -Ilib ./bin/sample_cli --pretty
 ```
 
+Follow the instructions on the screen to play!
+For creating a game with height=8, width=10, and num_bombs=12:
+
+```bash
+Type height, width, num_mines separated by spaces:
+8 10 12<enter>
+```
+
+For 'clicking' cell (0, 3):
+
+```bash
+What is your next move:
+P 0 3<enter>
+```
+
+For 'flagging' cell (2, 4):
+
+```bash
+What is your next move:
+F 2 4
+```
+
+## Installation
+
+Currently minesweeper is not available at RubyGems.org.
+That means you will have to install it from source.
+
+Checkout the repo:
+
+```bash
+git clone https://bitbucket.org/joaobertacchi/minesweeper.git
+```
+
+Run the automated tests:
+
+```bash
+cd minesweeper
+bundle exec rake spec
+```
+
+If want, open the coverage report created at ```./coverage/index.html```.
+
+And install minesweeper's gem:
+
+```bash
+bundle exec rake install
+```
+
+## Usage
+
+The only classe you need to create your game is Minesweeper::Game.
+Minesweeper::SimplePrinter and Minesweeper::PrettyPrinter could also be handful
+if you intend to create a console game. They get a game board state and print
+it in a nice way to the console. Minesweeper::PrettyPrinter is the most
+recommended since it creates a better presentation.
+
+To make the Minesweeper module available in your code:
+
+```ruby
+require 'minesweeper'
+```
+
+Then you just need to create a game object:
+
+```ruby
+width, height, num_mines = 10, 15, 15
+game = Minesweeper::Game.new(width, height, num_mines)
+```
+
+And use ```game.play(row, col)``` for clicking in a cell, ```game.flag(row, col)```
+to put a flag in a cell, ```game.still_playing?``` to check if the game is still
+running, ```game.victory?``` to check if the game finished with a won, and
+```game.board_state``` to obtain the full board state at any time.
+
+To print the board state you can do:
+
+```ruby
+printer = Minesweeper::PrettyPrinter.new
+printer.print(game.board_state)
+```
+
+Please refer to Minesweeper API for further instructions. To access the API
+documentation, first run from minesweeper repo:
+
+```ruby
+bundle exec yardoc
+```
+
+And then open ```doc/index.html``` from your prefered web browser.
+
+
+## Development
+
+After checking out the repo, run `bin/setup` to install dependencies. Then, run
+`rake spec` to run the tests. You can also run `bin/console` for an interactive
+prompt that will allow you to experiment.
+
+After running `bundle exec rake spec`, coverage report will be created and
+placed in ```coverage``` directory.
+
+To install this gem onto your local machine, run `bundle exec rake install`.
+To release a new version, update the version number in `version.rb`, and then
+run `bundle exec rake release`, which will create a git tag for the version,
+push git commits and tags, and push the `.gem` file to
+[rubygems.org](https://rubygems.org).
 
 ## Requirements Verification
 
@@ -683,82 +788,8 @@ This behavior is tested at ```lib/minesweeper/game_spec.rb``` with the following
     6. Demonstre, da maneira que achar melhor, que o seu projeto funciona como especificado.
 
 This whole section, Requirements Verification, shows how the requirements are verified.
-
-## Installation
-
-Currently minesweeper is not available at RubyGems.org.
-That means you will have to install it from source.
-
-Checkout the repo:
-
-```bash
-git clone https://bitbucket.org/joaobertacchi/minesweeper.git
-```
-
-And install it:
-
-```bash
-cd minesweeper
-bundle exec rake install
-```
-
-## Usage
-
-The only classe you need to create your game is Minesweeper::Game.
-Minesweeper::SimplePrinter and Minesweeper::PrettyPrinter could also be handful
-if you intend to create a console game. They get a game board state and print
-it in a nice way to the console. Minesweeper::PrettyPrinter is the most
-recommended since it creates a better presentation.
-
-To make the Minesweeper module available in your code:
-
-```ruby
-require 'minesweeper'
-```
-
-Then you just need to create a game object:
-
-```ruby
-width, height, num_mines = 10, 15, 15
-game = Minesweeper::Game.new(width, height, num_mines)
-```
-
-And use ```game.play(row, col)``` for clicking in a cell, ```game.flag(row, col)```
-to put a flag in a cell, ```game.still_playing?``` to check if the game is still
-running, ```game.victory?``` to check if the game finished with a won, and
-```game.board_state``` to obtain the full board state at any time.
-
-To print the board state you can do:
-
-```ruby
-printer = Minesweeper::PrettyPrinter.new
-printer.print(game.board_state)
-```
-
-Please refer to Minesweeper API for further instructions. To access the API
-documentation, first run from minesweeper repo:
-
-```ruby
-bundle exec yardoc
-```
-
-And then open ```doc/index.html``` from your prefered web browser.
-
-
-## Development
-
-After checking out the repo, run `bin/setup` to install dependencies. Then, run
-`rake spec` to run the tests. You can also run `bin/console` for an interactive
-prompt that will allow you to experiment.
-
-After running `bundle exec rake spec`, coverage report will be created and
-placed in ```coverage``` directory.
-
-To install this gem onto your local machine, run `bundle exec rake install`.
-To release a new version, update the version number in `version.rb`, and then
-run `bundle exec rake release`, which will create a git tag for the version,
-push git commits and tags, and push the `.gem` file to
-[rubygems.org](https://rubygems.org).
+If manual verification is also required, bin/sample_cli file can be used. Follow instructions
+provided in the beginning of this manual to run it.
 
 ## Contributing
 
