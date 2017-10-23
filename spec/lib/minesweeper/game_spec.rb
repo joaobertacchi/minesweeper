@@ -28,8 +28,19 @@ describe Minesweeper::Game do
     end
   end
   describe '#still_playing?' do
-    it 'tests if game is playing' do
-      expect(@game.still_playing?).to eq(true)
+    it 'for a game with no plays so far' do
+      unstarted_game = Minesweeper::Game.new(10, 10, 10)
+      expect(unstarted_game.still_playing?).to eq(true)
+    end
+    it 'for a game finished with victory' do
+      victory_game = Minesweeper::Game.new(10, 10, 0)
+      victory_game.play(0, 0)
+      expect(victory_game.still_playing?).to eq(false)
+    end
+    it 'for a game finished with defeat' do
+      defeat_game = Minesweeper::Game.new(10, 10, 100)
+      defeat_game.play(0, 0)
+      expect(defeat_game.still_playing?).to eq(false)
     end
   end
   describe '#play' do
@@ -45,6 +56,26 @@ describe Minesweeper::Game do
     end
     it 'throws exception for wrong params' do
       expect { @game.play(0) }.to raise_error(ArgumentError)
+    end
+    it 'after a bomb explodes no further play/flag is allowed' do
+      bombs = [
+        [1, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 1, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0]
+      ]
+      board = Minesweeper::Board.new(5, 5, 2, bombs)
+      game = Minesweeper::Game.new(5, 5, 2)
+      game.board = board
+      expect(game.play(0, 0)).to eq(true)
+      expect(game.still_playing?).to eq(false)
+      (0..4).each do |row|
+        (0..4).each do |col|
+          expect(game.play(row, col)).to eq(false)
+          expect(game.flag(row, col)).to eq(false)
+        end
+      end
     end
   end
   describe '#flag' do
@@ -156,7 +187,7 @@ describe Minesweeper::Game do
       board = Minesweeper::Board.new(5, 5, 2, bombs)
       game = Minesweeper::Game.new(5, 5, 2)
       game.board = board
-      game.play(0, 0) # Force game to finish with a explosion
+      game.play(0, 0) # Force game to finish with an explosion
       expect(game.board_state(xray: true)).to eq(expected_board_state)
     end
   end

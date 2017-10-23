@@ -4,6 +4,7 @@ require 'contracts'
 module Minesweeper
 
   # The real print behavior is implemented by its subclasses
+  # @abstract
   class Printer
     include Contracts::Core
     include Contracts::Builtin
@@ -64,7 +65,7 @@ module Minesweeper
   end
 
   # Class used for printing a board_state.
-  # Refer to Minesweeper::Game#board_state for checking board_state format.
+  # Refer to {Minesweeper::Game#board_state} for checking board_state format.
   #
   # This printer uses the following symbols:
   # - # : bomb
@@ -91,7 +92,7 @@ module Minesweeper
   end
 
   # Class used for printing a board_state.
-  # Refer to Minesweeper::Game#board_state for checking board_state format.
+  # Refer to {Minesweeper::Game#board_state} for checking board_state format.
   #
   # This printer uses the following color code and symbols:
   # - red (b) : bomb

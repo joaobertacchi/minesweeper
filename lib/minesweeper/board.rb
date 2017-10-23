@@ -135,6 +135,15 @@ module Minesweeper
       end
     end
 
+    # This is a private method. It is being displayed here for it to be linkable from
+    # Requirements Verification section in README.md
+    #
+    # A matrix of height X width dimenstions with 0s and 1s is created. Zero means no bomb
+    # and One means bomb. This matrix has exactly num_mines 1s randomly distributed. This
+    # matrix is used by the boad constructor {Minesweeper::Cell#initialize} for creating
+    # objects with and without bombs
+    #
+    # @!visibility public
     def random_bombs_position
       initial_num_non_mines = @width * @height - @num_mines
       shuffled_bombs = (Array.new(@num_mines) { 1 } + Array.new(initial_num_non_mines) { 0 }).shuffle
